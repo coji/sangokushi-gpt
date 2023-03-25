@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import dotenv from 'dotenv'
 import fs from 'fs/promises'
 import path from 'path'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid'
 import { createEmbedding } from './embed'
 import { createQdrant } from './qdrant'
 dotenv.config()
@@ -11,7 +11,7 @@ function hashChunk(chunk: string): string {
   const hash = crypto.createHash('sha256')
   hash.update(chunk)
   const hashBuffer = hash.digest()
-  const uuid = uuidv4({ random: hashBuffer })
+  const uuid = uuidV4({ random: hashBuffer })
   return uuid
 }
 function chunkText(text: string, chunkSize: number): string[] {
