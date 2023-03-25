@@ -1,3 +1,3 @@
 export default function Index() {
-  return <div>waiwa</div>
+  return <div>hoge</div>
 }
