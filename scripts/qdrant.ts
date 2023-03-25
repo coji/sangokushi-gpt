@@ -41,7 +41,7 @@ interface QdrantAddPointsResult {
 }
 
 interface QdrantPoint {
-  id: number
+  id: number | string
   vector: number[]
   payload?: any
 }
@@ -81,13 +81,18 @@ export const createQdrant = (server: string, port = 6333) => {
     const ret = await fetch(
       `http://${server}:${port}/collections/${collection}/points?wait=true`,
       {
-        method: 'PUt',
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ points }),
       },
     )
     if (!ret.ok) {
-      throw new Error(`Failed to add points: ${ret.statusText}`)
+      throw new Error(
+        // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+        `Failed to add points: ${ret.statusText} ${JSON.stringify(
+          await ret.json(),
+        )}`,
+      )
     }
     return (await ret.json()) as QdrantAddPointsResult
   }
