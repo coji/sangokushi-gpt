@@ -3,8 +3,8 @@ import dotenv from 'dotenv'
 import fs from 'fs/promises'
 import path from 'path'
 import { v4 as uuidV4 } from 'uuid'
-import { createEmbedding } from './embed'
-import { createQdrant } from './qdrant'
+import { createEmbedding } from './services/embed'
+import { createQdrant } from './services/qdrant'
 dotenv.config()
 
 function hashChunk(chunk: string): string {
@@ -98,7 +98,7 @@ const processText = async () => {
       const id = hashChunk(chunk)
 
       const { embedding, usage } = await embeddingService.embedText(chunk)
-      console.log({ filePath, id, usage })
+      console.log({ filePath, id, usage, chunk })
       await qdrant.addPoints({
         collection: 'test',
         points: [

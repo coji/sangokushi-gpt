@@ -1,8 +1,8 @@
 import fs from 'fs'
 import iconv from 'iconv-lite'
 import path from 'path'
-import { removeHeaderAndFooter } from './utils/removeHeaderAndFooter'
-import { removeRubyAndSymbols } from './utils/removeRubyAndSymbols'
+import { removeHeaderAndFooter } from '../utils/removeHeaderAndFooter'
+import { removeRubyAndSymbols } from '../utils/removeRubyAndSymbols'
 
 const inputDir = 'data/sangokushi'
 const outputDir = 'data/sangokushi_cleaned'

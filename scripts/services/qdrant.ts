@@ -79,7 +79,7 @@ export const createQdrant = (server: string, port = 6333) => {
    */
   const addPoints = async ({ collection, points }: QdrantAddPointsParams) => {
     const ret = await fetch(
-      `http://${server}:${port}/collections/${collection}/points?wait=true`,
+      `http://${server}:${port}/collections/${collection}/points`, // ?wait=true
       {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },

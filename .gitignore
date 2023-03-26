@@ -12,3 +12,5 @@ node_modules
 
 data/sangokushi
 data/sangokushi_cleaned
+data/sangokushi_structured
+data/sangokushi_embedded
