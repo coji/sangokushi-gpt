@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@chakra-ui/react': ^2.5.3
+  '@dqbd/tiktoken': ^1.0.2
   '@emotion/react': ^11.10.6
   '@emotion/styled': ^11.10.6
   '@remix-run/dev': ^1.14.3
@@ -60,6 +61,7 @@ specifiers:
 
 dependencies:
   '@chakra-ui/react': 2.5.3_zs2yzs4w3t27iaxmz25ugwqizq
+  '@dqbd/tiktoken': 1.0.2
   '@emotion/react': 11.10.6_k4en7uapxoluuejoeg6o3ic2aa
   '@emotion/styled': 11.10.6_zor2bu4ftuliqy4oeppgoopsea
   '@remix-run/node': 1.14.3
@@ -2480,6 +2482,10 @@ packages:
     engines: {node: '>=12'}
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
+    dev: false
+
+  /@dqbd/tiktoken/1.0.2:
+    resolution: {integrity: sha512-AjGTBRWsMoVmVeN55NLyupyM8TNamOUBl6tj5t/leLDVup3CFGO9tVagNL1jf3GyZLkWZSTmYVbPQ/M2LEcNzw==}
     dev: false
 
   /@edge-runtime/format/1.1.0:

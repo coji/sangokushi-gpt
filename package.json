@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.5.3",
+    "@dqbd/tiktoken": "^1.0.2",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@remix-run/node": "^1.14.3",
