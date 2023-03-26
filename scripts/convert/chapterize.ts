@@ -5,15 +5,18 @@ import { parseText } from '../utils/parseText'
 const inputDir = 'data/sangokushi_cleaned'
 const outputDir = 'data/sangokushi_structured'
 const files = [
-  //  '01jo.txt',
+  '01jo.txt',
   '02toenno_maki.txt',
-  // '03gunseino_maki.txt',
-  // '04somono_maki.txt',
-  // '05shindono_maki.txt',
-  // '06komeino_maki.txt',
-  // '07sekihekino_maki.txt',
-  // '08boshokuno_maki.txt',
-  // '09tonanno_maki.txt',
+  '03gunseino_maki.txt',
+  '04somono_maki.txt',
+  '05shindono_maki.txt',
+  '06komeino_maki.txt',
+  '07sekihekino_maki.txt',
+  '08boshokuno_maki.txt',
+  '09tonanno_maki.txt',
+  '10suishino_maki.txt',
+  '11gojogenno_maki.txt',
+  '12hengaiyoroku.txt',
 ]
 
 // 出力ディレクトリが存在しない場合、作成
@@ -21,12 +24,18 @@ if (!fs.existsSync(outputDir)) {
   fs.mkdirSync(outputDir)
 }
 
+const chapters = []
 // 各ファイルに処理を適用
 for (const file of files) {
   const inputFilePath = path.join(inputDir, file)
   const outputFilePath = path.join(outputDir, file)
 
   const data = fs.readFileSync(inputFilePath, 'utf-8')
-  const chapters = parseText(data)
-  console.log(chapters)
+  const fileChapters = parseText(data)
+  chapters.push({
+    file,
+    ...fileChapters,
+  })
 }
+
+console.log(chapters)

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 type ParsedSection = {
   volumeTitle: string
   chapterNumber: number
@@ -32,6 +33,13 @@ export function parseText(text: string): ParsedSection[] {
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
 
+    // console.log({
+    //   state,
+    //   chapterTitle,
+    //   sectionNumber,
+    //   line,
+    // })
+
     switch (state) {
       case ParserState.VolumeTitle:
         if (line !== '三国志' && line !== '吉川英治' && line !== '') {
@@ -62,7 +70,10 @@ export function parseText(text: string): ParsedSection[] {
         break
 
       case ParserState.Content:
-        if (line === '' && (lines[i + 1] === '' || isKanjiNum(lines[i + 1]))) {
+        if (
+          (line === '' && lines[i + 1]?.[0] !== '　' && lines[i + 2] === '') ||
+          i + 1 == lines.length // 最終行
+        ) {
           const contentLines = []
 
           for (let j = startLineNumber; j < i; j++) {
@@ -75,16 +86,15 @@ export function parseText(text: string): ParsedSection[] {
             chapterTitle,
             sectionNumber,
             startLineNumber,
-            content: contentLines.join('\n'),
+            content: contentLines.join('\n').trim(),
           })
 
-          if (
-            line === '' &&
-            (lines[i + 1] === '' || isKanjiNum(lines[i + 1]))
-          ) {
-            state = isKanjiNum(lines[i + 1])
-              ? ParserState.ChapterTitle
-              : ParserState.SectionNumber
+          if (line === '' && !isKanjiNum(lines[i + 1]) && lines[i + 2] === '') {
+            state = ParserState.ChapterTitle
+          }
+
+          if (line === '' && isKanjiNum(lines[i + 1]) && lines[i + 2] === '') {
+            state = ParserState.SectionNumber
           }
         }
         break

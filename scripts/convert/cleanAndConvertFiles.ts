@@ -16,6 +16,9 @@ const files = [
   '07sekihekino_maki.txt',
   '08boshokuno_maki.txt',
   '09tonanno_maki.txt',
+  '10suishino_maki.txt',
+  '11gojogenno_maki.txt',
+  '12hengaiyoroku.txt',
 ]
 
 // 出力ディレクトリが存在しない場合、作成
