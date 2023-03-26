@@ -10,7 +10,7 @@ import {
 import type { V2_MetaFunction } from '@vercel/remix'
 
 export const meta: V2_MetaFunction = () => [
-  { title: '三国志GPT' },
+  { title: '三国志 GPT' },
   { charSet: 'utf-8' },
   { name: 'viewport', content: 'width=device-width,initial-scale=1' },
   { name: 'description', content: '三国志についてなんでも質問できる GPT です' },

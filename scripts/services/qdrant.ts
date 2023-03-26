@@ -100,7 +100,7 @@ export const createQdrant = (server: string, port = 6333) => {
   /**
    *
    */
-  const search = async ({
+  const search = async <T>({
     collection,
     params,
   }: {
@@ -111,19 +111,20 @@ export const createQdrant = (server: string, port = 6333) => {
       filter?: any
     }
   }) => {
+    console.log('search', JSON.stringify({ ...params, with_payload: true }))
     const ret = await fetch(
-      `http://${server}:${port}/collections/${collection}/points?wait=true`,
+      `http://${server}:${port}/collections/${collection}/points/search`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...params }),
+        body: JSON.stringify({ ...params, with_payload: true }),
       },
     )
     if (!ret.ok) {
-      throw new Error(`Failed to add points: ${ret.statusText}`)
+      throw new Error(`Failed to search: ${ret.statusText}`)
     }
     return (await ret.json()) as {
-      result: [{ id: number; score: number }]
+      result: { id: number; score: number; payload: T }[]
       status: 'ok'
       time: number
     }
