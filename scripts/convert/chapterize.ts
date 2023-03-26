@@ -28,14 +28,16 @@ const chapters = []
 // 各ファイルに処理を適用
 for (const file of files) {
   const inputFilePath = path.join(inputDir, file)
-  const outputFilePath = path.join(outputDir, file)
 
   const data = fs.readFileSync(inputFilePath, 'utf-8')
   const fileChapters = parseText(data)
-  chapters.push({
-    file,
-    ...fileChapters,
-  })
+  for (const chapter of fileChapters) {
+    chapters.push({
+      file: path.parse(file).name,
+      ...chapter,
+    })
+  }
 }
 
-console.log(chapters)
+const outputFilePath = path.join(outputDir, 'sangokushi.json')
+fs.writeFileSync(outputFilePath, JSON.stringify(chapters, null, 2))
