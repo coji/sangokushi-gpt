@@ -66,24 +66,6 @@ const init = async () => {
   })
 }
 
-const testEmbed = async () => {
-  const qdrant = createQdrant('localhost', 6333)
-  const embeddingService = createEmbedding()
-
-  const text = 'Hello world'
-  const { embedding, usage } = await embeddingService.embedText(text)
-  await qdrant.addPoints({
-    collection: 'test',
-    points: [
-      {
-        id: 1,
-        vector: embedding,
-        payload: { text },
-      },
-    ],
-  })
-}
-
 const processText = async () => {
   const dirPath = 'data/sangokushi_cleaned'
   const chunkSize = 100
@@ -99,6 +81,7 @@ const processText = async () => {
 
       const { embedding, usage } = await embeddingService.embedText(chunk)
       console.log({ filePath, id, usage, chunk })
+      /*
       await qdrant.addPoints({
         collection: 'test',
         points: [
@@ -109,6 +92,7 @@ const processText = async () => {
           },
         ],
       })
+      */
     }
   }
 }

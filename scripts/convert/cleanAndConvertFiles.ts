@@ -37,7 +37,10 @@ for (const file of files) {
     const decodedText = iconv.decode(data, 'Shift_JIS')
     const bodyText = removeHeaderAndFooter(decodedText)
     const cleanedText = removeRubyAndSymbols(bodyText)
-    const encodedText = iconv.encode(cleanedText, 'UTF-8')
+    const encodedText = iconv.encode(
+      cleanedText.replace(/\r\n/g, '\n'),
+      'UTF-8',
+    )
 
     fs.writeFile(outputFilePath, encodedText, (err) => {
       if (err) {
