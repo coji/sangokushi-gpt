@@ -74,6 +74,20 @@ export const createQdrant = (server: string, port = 6333) => {
     return (await ret.json()) as QdrantCollectionCreateResult
   }
 
+  const deleteCollection = async (collection: string) => {
+    const ret = await fetch(
+      `http://${server}:${port}/collections/${collection}`,
+      {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+      },
+    )
+    if (!ret.ok) {
+      throw new Error(`Failed to create collection: ${ret.statusText}`)
+    }
+    return (await ret.json()) as object
+  }
+
   /**
    * コレクションにポイントを追加する
    */
@@ -109,15 +123,20 @@ export const createQdrant = (server: string, port = 6333) => {
       vector: number[]
       limit: number
       filter?: any
+      with_vector?: boolean
     }
   }) => {
-    console.log('search', JSON.stringify({ ...params, with_payload: true }))
+    //    console.log('search', JSON.stringify({ ...params, with_payload: true }))
     const ret = await fetch(
       `http://${server}:${port}/collections/${collection}/points/search`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...params, with_payload: true }),
+        body: JSON.stringify({
+          ...params,
+          with_payload: true,
+          with_vector: params.with_vector ?? false,
+        }),
       },
     )
     if (!ret.ok) {
@@ -132,6 +151,7 @@ export const createQdrant = (server: string, port = 6333) => {
 
   return {
     createCollection,
+    deleteCollection,
     addPoints,
     search,
   }
