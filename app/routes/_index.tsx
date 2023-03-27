@@ -103,8 +103,8 @@ export default function Index() {
           <Table>
             <Thead>
               <Tr>
-                <Th>ID</Th>
                 <Th>Score</Th>
+                <Th>Section</Th>
                 <Th>コンテンツ</Th>
               </Tr>
             </Thead>
