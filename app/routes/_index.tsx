@@ -60,7 +60,7 @@ export const action = async ({ request }: ActionArgs) => {
   })
   */
 
-  return json({ result: result.matches, usage })
+  return json({ result: result.matches, usage, embedding })
 }
 
 export default function Index() {
@@ -78,7 +78,7 @@ export default function Index() {
         <Heading>三国志 GPT</Heading>
       </Box>
 
-      <Container py="4" px="2">
+      <Container py="4" px="2" maxW="container.xl">
         <Box as={Form} method="post">
           <HStack alignItems="end">
             <FormControl>
@@ -115,7 +115,32 @@ export default function Index() {
                   return (
                     <Tr key={matches.id}>
                       <Td>{matches.score}</Td>
-                      <Td>{matches.id}</Td>
+                      <Td>
+                        <Box>
+                          {(matches.metadata as Record<string, string>)['file']}
+                        </Box>
+                        <Box>
+                          {
+                            (matches.metadata as Record<string, string>)[
+                              'chapterTitle'
+                            ]
+                          }
+                        </Box>
+                        <Box>
+                          {
+                            (matches.metadata as Record<string, string>)[
+                              'sectionNumber'
+                            ]
+                          }
+                        </Box>
+                      </Td>
+                      <Td>
+                        {
+                          (matches.metadata as Record<string, string>)[
+                            'content'
+                          ]
+                        }
+                      </Td>
                     </Tr>
                   )
                 })}
