@@ -7,21 +7,48 @@ import {
   HStack,
   Input,
   Link,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from '@chakra-ui/react'
+import { PineconeClient } from '@pinecone-database/pinecone'
 import { Form, useActionData, useNavigation } from '@remix-run/react'
 import { json, type ActionArgs } from '@vercel/remix'
-import { createQdrant } from 'scripts/services/qdrant'
-import type { Section } from 'types/model'
+import invariant from 'tiny-invariant'
 import { fetchEmbedding } from '~/services/openai-embedding.server'
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
 
-  const qdrant = createQdrant('localhost')
-
   const input = formData.get('input') as string
   if (input === '') throw new Error('input is empty')
 
+  const { embedding, usage } = await fetchEmbedding(input)
+
+  invariant(process.env.PINECONE_API_KEY, 'PINECONE_API_KEY is required')
+  const pinecone = new PineconeClient()
+  await pinecone.init({
+    environment: 'us-east1-gcp',
+    apiKey: process.env.PINECONE_API_KEY,
+  })
+  const index = pinecone.Index('sangokushi')
+
+  const result = await index.query({
+    queryRequest: {
+      topK: 5,
+      includeMetadata: true,
+      vector: embedding,
+      namespace: 'vector',
+    },
+  })
+  console.log(result)
+
+  /*
+  const qdrant = createQdrant('localhost')
   const { embedding, usage } = await fetchEmbedding(input)
   console.log({ input, usage })
   const { result } = await qdrant.search<Section>({
@@ -31,8 +58,9 @@ export const action = async ({ request }: ActionArgs) => {
       vector: embedding,
     },
   })
+  */
 
-  return json({ result, usage })
+  return json({ result: result.matches, usage })
 }
 
 export default function Index() {
@@ -71,7 +99,31 @@ export default function Index() {
           </HStack>
         </Box>
 
-        {actionData &&
+        <TableContainer>
+          <Table>
+            <Thead>
+              <Tr>
+                <Th>ID</Th>
+                <Th>Score</Th>
+                <Th>コンテンツ</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {actionData &&
+                actionData.result &&
+                actionData.result.map((matches) => {
+                  return (
+                    <Tr key={matches.id}>
+                      <Td>{matches.score}</Td>
+                      <Td>{matches.id}</Td>
+                    </Tr>
+                  )
+                })}
+            </Tbody>
+          </Table>
+        </TableContainer>
+
+        {/* {actionData &&
           actionData.result.map((section) => (
             <HStack key={section.id}>
               <Box>{section.score}</Box>
@@ -80,7 +132,7 @@ export default function Index() {
                 {section.payload.chapterTitle} {section.payload.sectionNumber}
               </Box>
             </HStack>
-          ))}
+          ))} */}
       </Container>
 
       <Box textAlign="center" px="2" py="4" bgColor="white">

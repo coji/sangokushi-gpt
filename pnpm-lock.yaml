@@ -5,6 +5,7 @@ specifiers:
   '@dqbd/tiktoken': ^1.0.2
   '@emotion/react': ^11.10.6
   '@emotion/styled': ^11.10.6
+  '@pinecone-database/pinecone': ^0.0.11
   '@remix-run/dev': ^1.14.3
   '@remix-run/eslint-config': ^1.14.3
   '@remix-run/node': ^1.14.3
@@ -64,6 +65,7 @@ dependencies:
   '@dqbd/tiktoken': 1.0.2
   '@emotion/react': 11.10.6_k4en7uapxoluuejoeg6o3ic2aa
   '@emotion/styled': 11.10.6_zor2bu4ftuliqy4oeppgoopsea
+  '@pinecone-database/pinecone': 0.0.11
   '@remix-run/node': 1.14.3
   '@remix-run/react': 1.14.3_biqbaboplfbrettd7655fr4n2y
   '@vercel/node': 2.10.0
@@ -3439,6 +3441,15 @@ packages:
     resolution: {integrity: sha512-Aq58f5HiWdyDlFffbbSjAlv596h/cOnt2DO1w3DOC7OJ5EHs0hd/nycJfiu9RJbT6Yk6F1knnRRXNSpxoIVZ9Q==}
     dev: true
 
+  /@pinecone-database/pinecone/0.0.11:
+    resolution: {integrity: sha512-mmIcmrFEiU8uqprexuCBpNvcVI2yef3JaVO5pbqEaeHmsLG6X805wUdBKv7JpE3EAr+2GSE/MO0ND+lLKWBuVg==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      cross-fetch: 3.1.5
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
   /@pkgr/utils/2.3.1:
     resolution: {integrity: sha512-wfzX8kc1PMyUILA+1Z/EqoE4UCXGy0iRGMhPwdfae1+f0OXlLqCk+By+aMzgJBzR9AzS4CDizioG6Ss1gvAFJw==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
@@ -5001,6 +5012,14 @@ packages:
     hasBin: true
     dependencies:
       cross-spawn: 7.0.3
+    dev: false
+
+  /cross-fetch/3.1.5:
+    resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}
+    dependencies:
+      node-fetch: 2.6.7
+    transitivePeerDependencies:
+      - encoding
     dev: false
 
   /cross-spawn/6.0.5:
