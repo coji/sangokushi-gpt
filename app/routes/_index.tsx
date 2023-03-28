@@ -24,9 +24,12 @@ import { fetchEmbedding } from '~/services/openai-embedding.server'
 
 export const meta: V2_MetaFunction = () => [
   { property: 'og:title', content: '三国志 GPT' },
-  { property: 'og:url', content: 'sangokushi-gpt.vercel.app' },
+  { property: 'og:url', content: 'https://sangokushi-gpt.vercel.app/' },
   { property: 'og:description', content: '三国志の世界をChatGPTで探索。' },
-  { property: 'og:image', content: '/resource/ogp' },
+  {
+    property: 'og:image',
+    content: 'https://sangokushi-gpt.vercel.app/resource/ogp',
+  },
   { property: 'og:image:width', content: '1200' },
   { property: 'og:image:height', content: '630' },
   { property: 'og:twitter:card', content: 'summary_large_image' },
