@@ -17,24 +17,23 @@ import {
 } from '@chakra-ui/react'
 import { PineconeClient } from '@pinecone-database/pinecone'
 import { Form, useActionData, useNavigation } from '@remix-run/react'
-import type { V2_MetaFunction } from '@vercel/remix'
 import { json, type ActionArgs } from '@vercel/remix'
 import invariant from 'tiny-invariant'
 import { fetchEmbedding } from '~/services/openai-embedding.server'
 
-export const meta: V2_MetaFunction = () => [
-  { property: 'og:title', content: '三国志 GPT' },
-  { property: 'og:url', content: 'https://sangokushi-gpt.vercel.app/' },
-  { property: 'og:description', content: '三国志の世界をChatGPTで探索。' },
-  {
-    property: 'og:image',
-    content: 'https://sangokushi-gpt.vercel.app/resource/ogp',
-  },
-  { property: 'og:image:width', content: '1200' },
-  { property: 'og:image:height', content: '630' },
-  { property: 'og:twitter:card', content: 'summary_large_image' },
-  { property: 'og:twitter:site', content: '@techtalkjp' },
-]
+// export const meta: V2_MetaFunction = () => [
+// { property: 'og:title', content: '三国志 GPT' },
+// { property: 'og:url', content: 'https://sangokushi-gpt.vercel.app/' },
+// { property: 'og:description', content: '三国志の世界をChatGPTで探索。' },
+// {
+//   property: 'og:image',
+//   content: 'https://sangokushi-gpt.vercel.app/resource/ogp',
+// },
+// { property: 'og:image:width', content: '1200' },
+// { property: 'og:image:height', content: '630' },
+// { property: 'og:twitter:card', content: 'summary_large_image' },
+// { property: 'og:twitter:site', content: '@techtalkjp' },
+// ]
 
 export const action = async ({ request }: ActionArgs) => {
   const formData = await request.formData()
