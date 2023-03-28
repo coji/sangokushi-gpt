@@ -17,5 +17,4 @@ module.exports = {
     v2_meta: true,
     v2_routeConvention: true,
   },
-  serverDependenciesToBundle: ['@vercel/og', 'yoga-wasm-web'],
 }
