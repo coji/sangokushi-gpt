@@ -6,7 +6,7 @@ export const fetchEmbedding = async (text: string) => {
     },
     method: 'POST',
     body: JSON.stringify({
-      input: 'Your text string goes here',
+      input: text,
       model: 'text-embedding-ada-002',
     }),
   })
