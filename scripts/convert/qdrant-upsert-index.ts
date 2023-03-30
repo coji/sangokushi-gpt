@@ -4,21 +4,21 @@ import { createQdrant } from 'scripts/services/qdrant'
 import type { Section } from 'types/model'
 const qdrant = createQdrant('localhost', 6333)
 
-const initialize = async () => {
-  await qdrant.deleteCollection('sangokushi')
+const initialize = async (index: string) => {
+  await qdrant.deleteCollection(index)
   await qdrant.createCollection({
-    collection: 'sangokushi',
+    collection: index,
     vectors: { size: 1536, distance: 'Cosine' },
   })
 }
 
-const main = async () => {
+const main = async (index: string) => {
   const inputDir = 'data/sangokushi_embedded'
   const embeddedSections = JSON.parse(
     await fs.readFile(path.join(inputDir, 'sangokushi.json'), 'utf-8'),
   ) as Section[]
 
-  await initialize()
+  await initialize(index)
 
   console.log('addPoints')
   await qdrant.addPoints({
@@ -39,4 +39,4 @@ const main = async () => {
   console.log('done')
 }
 
-void main()
+void main('sangokushi')
