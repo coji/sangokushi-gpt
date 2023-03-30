@@ -1,0 +1,20 @@
+app = "sangokushi-gpt-qdrant"
+
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  image = "qdrant/qdrant"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[mounts]]
+  destination = "/qdrant/storage"
+  source = "sangokushi_gpt_qdrant_storage"
+
+[metrics]
+  port = 9091
+  path = "/metrics"

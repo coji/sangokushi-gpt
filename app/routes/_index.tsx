@@ -16,8 +16,8 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react'
+import { json, type ActionArgs } from '@remix-run/node'
 import { Form, useActionData, useNavigation } from '@remix-run/react'
-import { json, type ActionArgs } from '@vercel/remix'
 import { sangokushiSearch } from '~/features/sangokushi/services/sangokushi-search.server'
 
 // export const meta: V2_MetaFunction = () => [
