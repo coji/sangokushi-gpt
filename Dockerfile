@@ -48,6 +48,7 @@ RUN pnpm run build
 # Run the app
 FROM base
 
+EXPOSE 3000
 WORKDIR /app
 
 COPY --from=production-deps /app/package.json /app/package.json

@@ -3,7 +3,7 @@ import { fetchEmbedding } from '~/services/openai-embedding.server'
 import { createQdrant } from '~/services/qdrant.server'
 
 const qdrantQuery = async (embedding: number[]) => {
-  const qdrant = createQdrant('localhost')
+  const qdrant = createQdrant(process.env.QDRANT_HOST ?? 'localhost')
   return await qdrant.search({
     collection: 'sangokushi',
     params: {
