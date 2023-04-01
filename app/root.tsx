@@ -1,4 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
+import type { V2_MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -7,7 +8,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import type { V2_MetaFunction } from '@vercel/remix'
 
 export const meta: V2_MetaFunction = () => [
   { title: '三国志 GPT' },

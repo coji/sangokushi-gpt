@@ -3,49 +3,34 @@ import {
   Button,
   Container,
   FormControl,
+  Grid,
   HStack,
   Heading,
   Input,
   Link,
   Stack,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
+  Text,
 } from '@chakra-ui/react'
-import { json, type ActionArgs } from '@remix-run/node'
-import { Form, useActionData, useNavigation } from '@remix-run/react'
+import { json, type LoaderArgs } from '@remix-run/node'
+import { Form, useLoaderData, useNavigation } from '@remix-run/react'
 import { sangokushiSearch } from '~/features/sangokushi/services/sangokushi-search.server'
 
-// export const meta: V2_MetaFunction = () => [
-// { property: 'og:title', content: '三国志 GPT' },
-// { property: 'og:url', content: 'https://sangokushi-gpt.vercel.app/' },
-// { property: 'og:description', content: '三国志の世界をChatGPTで探索。' },
-// {
-//   property: 'og:image',
-//   content: 'https://sangokushi-gpt.vercel.app/resource/ogp',
-// },
-// { property: 'og:image:width', content: '1200' },
-// { property: 'og:image:height', content: '630' },
-// { property: 'og:twitter:card', content: 'summary_large_image' },
-// { property: 'og:twitter:site', content: '@techtalkjp' },
-// ]
-
-export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData()
-
-  const input = formData.get('input') as string
-  if (input === '') throw new Error('input is empty')
+export const loader = async ({ request }: LoaderArgs) => {
+  const url = new URL(request.url)
+  const input = url.searchParams.get('input')
+  if (!input) {
+    return json({
+      result: [],
+      usage: 0,
+    })
+  }
 
   const { result, usage } = await sangokushiSearch(input)
   return json({ result, usage })
 }
 
 export default function Index() {
-  const actionData = useActionData<typeof action>()
+  const loaderData = useLoaderData<typeof loader>()
   const navigation = useNavigation()
 
   return (
@@ -59,9 +44,9 @@ export default function Index() {
         <Heading>三国志 GPT</Heading>
       </Box>
 
-      <Container py="4" px="2" maxW="container.lg">
+      <Container py="4" px="2" maxW="container.lg" overflow="auto">
         <Stack>
-          <Box as={Form} method="post">
+          <Box as={Form} method="GET">
             <HStack alignItems="end">
               <FormControl>
                 <Input
@@ -81,30 +66,25 @@ export default function Index() {
             </HStack>
           </Box>
 
-          <TableContainer>
-            <Table maxW="full">
-              <Thead>
-                <Tr>
-                  <Th>Score</Th>
-                  <Td>文字数</Td>
-                  <Th>コンテンツ</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                {actionData &&
-                  actionData.result &&
-                  actionData.result.map((result) => {
-                    return (
-                      <Tr key={result.id}>
-                        <Td>{result.score}</Td>
-                        <Td>{result.section.content.length}</Td>
-                        <Td>{result.section.content}</Td>
-                      </Tr>
-                    )
-                  })}
-              </Tbody>
-            </Table>
-          </TableContainer>
+          <Grid gridTemplateColumns="auto auto 1fr" gap="4">
+            <Box>Score</Box>
+            <Box>文字数</Box>
+            <Box>コンテンツ</Box>
+
+            {loaderData &&
+              loaderData.result &&
+              loaderData.result.map((result) => {
+                return (
+                  <>
+                    <Box>{result.score}</Box>
+                    <Box>{result.section.content.length}</Box>
+                    <Box>
+                      <Text noOfLines={1}>{result.section.content}</Text>
+                    </Box>
+                  </>
+                )
+              })}
+          </Grid>
         </Stack>
       </Container>
 
