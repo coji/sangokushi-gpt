@@ -11,7 +11,7 @@ export const action = async ({ request }: ActionArgs) => {
 
     const vectors = await vectorSearch(input)
 
-    const systemPrompt = `あなたは書士です。本の内容に関する質問に答えてください。回答には以下のコンテキストの内容を使って下さい。
+    const systemPrompt = `あなたは小説家です。ユーザからの要望に沿った小説を作ってください。素材として以下のコンテキストの内容を使って下さい。
 
 コンテキスト:
 ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
