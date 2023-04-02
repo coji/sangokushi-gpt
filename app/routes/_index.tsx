@@ -20,13 +20,14 @@ export const loader = async ({ request }: LoaderArgs) => {
   const input = url.searchParams.get('input')
   if (!input) {
     return json({
+      input: '',
       result: [],
       usage: 0,
     })
   }
 
   const { result, usage } = await sangokushiSearch(input)
-  return json({ result, usage })
+  return json({ input, result, usage })
 }
 
 export default function Index() {
@@ -54,7 +55,8 @@ export default function Index() {
                   name="input"
                   autoFocus
                   placeholder="劉備と関羽が出会ったシーンは？"
-                ></Input>
+                  defaultValue={loaderData.input}
+                />
               </FormControl>
               <Button
                 colorScheme="blue"
