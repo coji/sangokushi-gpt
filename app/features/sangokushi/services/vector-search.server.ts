@@ -2,23 +2,23 @@ import type { Section } from '~/../types/model'
 import { fetchEmbedding } from '~/services/openai-embedding.server'
 import { createQdrant } from '~/services/qdrant.server'
 
-const qdrantQuery = async (embedding: number[]) => {
+const qdrantQuery = async (embedding: number[], top = 100) => {
   const qdrant = createQdrant(process.env.QDRANT_HOST ?? 'localhost')
   return await qdrant.search({
     collection: 'sangokushi',
     params: {
       vector: embedding,
-      limit: 100,
+      limit: top,
       with_vector: false,
     },
   })
 }
 
 export type SangokushiPayload = Omit<Section, 'id' | 'vector'>
-export const sangokushiSearch = async (input: string) => {
+export const vectorSearch = async (input: string, top = 1) => {
   const { embedding, usage } = await fetchEmbedding(input)
 
-  const searchResult = await qdrantQuery(embedding)
+  const searchResult = await qdrantQuery(embedding, top)
   return {
     result: searchResult.result.map((result) => ({
       id: result.id,

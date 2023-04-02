@@ -9,11 +9,12 @@ import {
   Input,
   Link,
   Stack,
-  Text,
 } from '@chakra-ui/react'
 import { json, type LoaderArgs } from '@remix-run/node'
-import { Form, useLoaderData, useNavigation } from '@remix-run/react'
-import { sangokushiSearch } from '~/features/sangokushi/services/sangokushi-search.server'
+import { useLoaderData } from '@remix-run/react'
+import nl2br from 'react-nl2br'
+import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
+import { vectorSearch } from '~/features/sangokushi/services/vector-search.server'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -26,13 +27,20 @@ export const loader = async ({ request }: LoaderArgs) => {
     })
   }
 
-  const { result, usage } = await sangokushiSearch(input)
+  const { result, usage } = await vectorSearch(input)
   return json({ input, result, usage })
 }
 
 export default function Index() {
   const loaderData = useLoaderData<typeof loader>()
-  const navigation = useNavigation()
+  const generator = useGenerator()
+
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const input = String(formData.get('input'))
+    void generator.generate(input)
+  }
 
   return (
     <Box
@@ -47,7 +55,7 @@ export default function Index() {
 
       <Container py="4" px="2" maxW="container.lg" overflow="auto">
         <Stack>
-          <Box as={Form} method="GET">
+          <form onSubmit={(e) => handleFormSubmit(e)}>
             <HStack alignItems="end">
               <FormControl>
                 <Input
@@ -61,31 +69,15 @@ export default function Index() {
               <Button
                 colorScheme="blue"
                 type="submit"
-                isLoading={navigation.state !== 'idle'}
+                isLoading={generator.isLoading}
               >
                 Query
               </Button>
             </HStack>
-          </Box>
+          </form>
 
           <Grid gridTemplateColumns="auto auto 1fr" gap="4">
-            <Box>Score</Box>
-            <Box>文字数</Box>
-            <Box>コンテンツ</Box>
-
-            {loaderData &&
-              loaderData.result &&
-              loaderData.result.map((result) => {
-                return (
-                  <>
-                    <Box>{result.score}</Box>
-                    <Box>{result.section.content.length}</Box>
-                    <Box>
-                      <Text noOfLines={1}>{result.section.content}</Text>
-                    </Box>
-                  </>
-                )
-              })}
+            {nl2br(generator.data)}
           </Grid>
         </Stack>
       </Container>
