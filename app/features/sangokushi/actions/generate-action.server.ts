@@ -11,7 +11,10 @@ export const action = async ({ request }: ActionArgs) => {
 
     const vectors = await vectorSearch(input)
 
-    const systemPrompt = `あなたは小説家です。ユーザからの要望に沿った小説を作ってください。素材として以下のコンテキストの内容を使って下さい。
+    const systemPrompt = `あなたは小説家です。
+ユーザからの要望に沿った小説を作ってください。
+最初にクライマックスを持ってきて、続きを簡潔にしつつ、次の話を読みたくなるようにクリフハンガーのような展開にしてください。
+600文字以内でお願いします。素材として以下のコンテキストの内容を使って下さい。
 
 コンテキスト:
 ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
