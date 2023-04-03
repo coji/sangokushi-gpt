@@ -45,7 +45,7 @@ export default function Index() {
   return (
     <Box
       bgColor="gray.100"
-      h="100dvh"
+      minH="100dvh"
       display="grid"
       gridTemplateRows="auto 1fr auto"
     >
@@ -53,7 +53,7 @@ export default function Index() {
         <Heading>三国志 GPT</Heading>
       </Box>
 
-      <Container py="4" px="2" maxW="container.lg" overflow="auto">
+      <Container py="4" px="2" maxW="container.lg">
         <Stack>
           <form onSubmit={(e) => handleFormSubmit(e)}>
             <HStack alignItems="end">
