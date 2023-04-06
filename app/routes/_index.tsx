@@ -129,7 +129,7 @@ export default function Index() {
                                   <Text>{result.section.chapterTitle}</Text>
                                   <Text>{result.section.sectionNumber}</Text>
                                   <Button
-                                    as={Link}
+                                    as="a"
                                     rightIcon={<ExternalLinkIcon />}
                                     href="https://github.com/coji/sangokushi-gpt/blob/main/app/features/sangokushi/actions/generate-action.server.ts#L14"
                                     target="_blank"
