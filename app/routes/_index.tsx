@@ -112,7 +112,7 @@ export default function Index() {
                               <Button
                                 size="xs"
                                 colorScheme="blue"
-                                variant="ghost"
+                                variant="outline"
                               >
                                 原文
                               </Button>
