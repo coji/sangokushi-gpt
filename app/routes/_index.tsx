@@ -1,3 +1,4 @@
+import { ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -98,16 +99,18 @@ export default function Index() {
                         <React.Fragment key={result.id}>
                           <Box
                             fontSize="xs"
-                            fontWeight="bold"
+                            fontWeight="extrabold"
                             color="green.500"
                           >
                             {Math.round(result.score * 1000) / 10}
-                            <small>%</small>
+                            <small>%</small> Match
                           </Box>
-                          <Text>参考出典</Text>
-                          <Text>横山英治 「三国志」</Text>
-                          <Text>{result.section.volumeTitle.trim()}</Text>
-                          <Popover>
+                          <Text color="gray.700">
+                            横山英治 「三国志」{' '}
+                            {result.section.volumeTitle.trim()}
+                          </Text>
+
+                          <Popover trigger="hover">
                             <PopoverTrigger>
                               <Button
                                 size="xs"
@@ -125,6 +128,17 @@ export default function Index() {
                                   <Text>{result.section.chapterNumber}</Text>
                                   <Text>{result.section.chapterTitle}</Text>
                                   <Text>{result.section.sectionNumber}</Text>
+                                  <Button
+                                    as={Link}
+                                    rightIcon={<ExternalLinkIcon />}
+                                    href="https://github.com/coji/sangokushi-gpt/blob/main/app/features/sangokushi/actions/generate-action.server.ts#L14"
+                                    target="_blank"
+                                    size="xs"
+                                    variant="outline"
+                                    colorScheme="blue"
+                                  >
+                                    Prompt
+                                  </Button>{' '}
                                 </HStack>
                               </PopoverHeader>
                               <PopoverBody>
