@@ -2,6 +2,7 @@
   "private": true,
   "sideEffects": false,
   "scripts": {
+    "seed": "tsx scripts/convert/qdrant-upsert-index.ts",
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
