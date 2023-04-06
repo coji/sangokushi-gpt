@@ -2,33 +2,42 @@ import {
   Box,
   Button,
   Container,
+  Flex,
   FormControl,
   Grid,
   HStack,
   Heading,
   Input,
   Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Stack,
+  Text,
 } from '@chakra-ui/react'
-import { json, type LoaderArgs } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { defer, type LoaderArgs } from '@remix-run/node'
+import { Await, Form, useLoaderData } from '@remix-run/react'
+import React from 'react'
 import nl2br from 'react-nl2br'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
 import { vectorSearch } from '~/features/sangokushi/services/vector-search.server'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const input = url.searchParams.get('input')
   if (!input) {
-    return json({
+    return defer({
       input: '',
-      result: [],
-      usage: 0,
+      vectorResult: null,
     })
   }
 
-  const { result, usage } = await vectorSearch(input)
-  return json({ input, result, usage })
+  const vectorResult = vectorSearch(input, 10)
+  return defer({ input, vectorResult })
 }
 
 export default function Index() {
@@ -36,7 +45,7 @@ export default function Index() {
   const generator = useGenerator()
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    // e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const input = String(formData.get('input'))
     void generator.generate(input)
@@ -55,8 +64,8 @@ export default function Index() {
 
       <Container py="4" px="2" maxW="container.lg">
         <Stack>
-          <form onSubmit={(e) => handleFormSubmit(e)}>
-            <HStack alignItems="end">
+          <Form onSubmit={(e) => handleFormSubmit(e)}>
+            <HStack align="end">
               <FormControl>
                 <Input
                   bgColor="white"
@@ -74,7 +83,65 @@ export default function Index() {
                 Query
               </Button>
             </HStack>
-          </form>
+          </Form>
+
+          <Flex justify="end">
+            <React.Suspense fallback={<p>Loading reviews...</p>}>
+              <Await
+                resolve={loaderData.vectorResult}
+                errorElement={<div>Error</div>}
+              >
+                {(vectorResult) => (
+                  <HStack fontSize="sm" align="center" flexWrap="wrap">
+                    {vectorResult?.result.slice(0, 1).map((result) => {
+                      return (
+                        <React.Fragment key={result.id}>
+                          <Box
+                            fontSize="xs"
+                            fontWeight="bold"
+                            color="green.500"
+                          >
+                            {Math.round(result.score * 1000) / 10}
+                            <small>%</small>
+                          </Box>
+                          <Text>参考出典</Text>
+                          <Text>横山英治 「三国志」</Text>
+                          <Text>{result.section.volumeTitle.trim()}</Text>
+                          <Popover>
+                            <PopoverTrigger>
+                              <Button
+                                size="xs"
+                                colorScheme="blue"
+                                variant="ghost"
+                              >
+                                原文
+                              </Button>
+                            </PopoverTrigger>
+                            <PopoverContent>
+                              <PopoverArrow />
+                              <PopoverCloseButton />
+                              <PopoverHeader>
+                                <HStack>
+                                  <Text>{result.section.chapterNumber}</Text>
+                                  <Text>{result.section.chapterTitle}</Text>
+                                  <Text>{result.section.sectionNumber}</Text>
+                                </HStack>
+                              </PopoverHeader>
+                              <PopoverBody>
+                                <Box overflow="auto" height="20rem">
+                                  {nl2br(result.section.content)}
+                                </Box>
+                              </PopoverBody>
+                            </PopoverContent>
+                          </Popover>
+                        </React.Fragment>
+                      )
+                    })}
+                  </HStack>
+                )}
+              </Await>
+            </React.Suspense>
+          </Flex>
 
           <Grid gridTemplateColumns="auto auto 1fr" gap="4">
             {nl2br(generator.data)}
