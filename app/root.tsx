@@ -18,14 +18,14 @@ export const meta: V2_MetaFunction = () => [
     content: '三国志についてなんでも答えてくれる GPT です',
   },
   { property: 'og:title', content: '三国志 GPT' },
-  { property: 'og:url', content: 'https://sangokushi-gpt.vercel.app/' },
+  { property: 'og:url', content: 'https://sangokushi-gpt.fly.dev/' },
   {
     property: 'og:description',
     content: '三国志についてなんでも答えてくれる GPT です',
   },
   {
     property: 'og:image',
-    content: 'https://sangokushi-gpt.vercel.app/resource/ogp',
+    content: 'https://sangokushi-gpt.fly.dev/resource/ogp',
   },
   { property: 'og:image:width', content: '1200' },
   { property: 'og:image:height', content: '630' },
