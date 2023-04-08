@@ -1,4 +1,3 @@
-import { ExternalLinkIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
@@ -10,13 +9,6 @@ import {
   Heading,
   Input,
   Link,
-  Popover,
-  PopoverArrow,
-  PopoverBody,
-  PopoverCloseButton,
-  PopoverContent,
-  PopoverHeader,
-  PopoverTrigger,
   Stack,
   Text,
 } from '@chakra-ui/react'
@@ -24,6 +16,7 @@ import { defer, type LoaderArgs } from '@remix-run/node'
 import { Await, Form, useLoaderData } from '@remix-run/react'
 import React from 'react'
 import nl2br from 'react-nl2br'
+import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
 import { vectorSearch } from '~/features/sangokushi/services/vector-search.server'
 
@@ -33,7 +26,13 @@ export const loader = ({ request }: LoaderArgs) => {
   if (!input) {
     return defer({
       input: '',
-      vectorResult: null,
+      vectorResult: {
+        result: [],
+        usage: 0,
+      } as {
+        result: Awaited<ReturnType<typeof vectorSearch>>['result']['0'][]
+        usage: number
+      },
     })
   }
 
@@ -46,10 +45,10 @@ export default function Index() {
   const generator = useGenerator()
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // e.preventDefault()
+    // e.preventDefault() // submit も実際にすることで、URL にクエリパラメータを追加する
     const formData = new FormData(e.currentTarget)
     const input = String(formData.get('input'))
-    void generator.generate(input)
+    void generator.generate(input) // ストリーミングで生成
   }
 
   return (
@@ -87,16 +86,25 @@ export default function Index() {
           </Form>
 
           <Flex justify="end">
-            <React.Suspense fallback={<p>Loading reviews...</p>}>
+            <React.Suspense
+              fallback={
+                <Text color="gray.700" fontSize="sm">
+                  Loading..
+                </Text>
+              }
+            >
               <Await
                 resolve={loaderData.vectorResult}
                 errorElement={<div>Error</div>}
               >
                 {(vectorResult) => (
                   <HStack fontSize="sm" align="center" flexWrap="wrap">
-                    {vectorResult?.result.slice(0, 1).map((result) => {
+                    {vectorResult.result.slice(0, 1).map((result) => {
                       return (
-                        <React.Fragment key={result.id}>
+                        <SectionReference
+                          key={result.id}
+                          section={result.section}
+                        >
                           <Box
                             fontSize="xs"
                             fontWeight="extrabold"
@@ -105,50 +113,7 @@ export default function Index() {
                             {Math.round(result.score * 1000) / 10}
                             <small>%</small> Match
                           </Box>
-                          <Text color="gray.700">
-                            吉川英治 「三国志」{' '}
-                            {result.section.volumeTitle.trim()}
-                          </Text>
-
-                          <Popover trigger="hover">
-                            <PopoverTrigger>
-                              <Button
-                                size="xs"
-                                colorScheme="blue"
-                                variant="outline"
-                              >
-                                原文
-                              </Button>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                              <PopoverArrow />
-                              <PopoverCloseButton />
-                              <PopoverHeader>
-                                <HStack>
-                                  <Text>{result.section.chapterNumber}</Text>
-                                  <Text>{result.section.chapterTitle}</Text>
-                                  <Text>{result.section.sectionNumber}</Text>
-                                  <Button
-                                    as="a"
-                                    rightIcon={<ExternalLinkIcon />}
-                                    href="https://github.com/coji/sangokushi-gpt/blob/main/app/features/sangokushi/actions/generate-action.server.ts#L14"
-                                    target="_blank"
-                                    size="xs"
-                                    variant="outline"
-                                    colorScheme="blue"
-                                  >
-                                    Prompt
-                                  </Button>{' '}
-                                </HStack>
-                              </PopoverHeader>
-                              <PopoverBody>
-                                <Box overflow="auto" height="20rem">
-                                  {nl2br(result.section.content)}
-                                </Box>
-                              </PopoverBody>
-                            </PopoverContent>
-                          </Popover>
-                        </React.Fragment>
+                        </SectionReference>
                       )
                     })}
                   </HStack>
