@@ -63,7 +63,7 @@ export default function Index() {
         <Heading>三国志 GPT</Heading>
       </Box>
 
-      <Container py="4" px="2" maxW="container.lg">
+      <Container py="4" px="2" maxW="container.lg" position="relative">
         <Stack>
           <Form onSubmit={(e) => handleFormSubmit(e)}>
             <HStack align="end">
@@ -106,7 +106,7 @@ export default function Index() {
                             <small>%</small> Match
                           </Box>
                           <Text color="gray.700">
-                            横山英治 「三国志」{' '}
+                            吉川英治 「三国志」{' '}
                             {result.section.volumeTitle.trim()}
                           </Text>
 
@@ -161,6 +161,18 @@ export default function Index() {
             {nl2br(generator.data)}
           </Grid>
         </Stack>
+
+        {/* <Box position="absolute" bottom="0">
+          <Button
+            colorScheme="red"
+            variant="outline"
+            onClick={() => {
+              generator.abort()
+            }}
+          >
+            生成をキャンセル
+          </Button>
+        </Box> */}
       </Container>
 
       <Box textAlign="center" px="2" py="4" bgColor="white">

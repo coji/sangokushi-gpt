@@ -19,7 +19,7 @@ export const action = async ({ request }: ActionArgs) => {
 コンテキスト:
 ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
 `
-    console.log(systemPrompt)
+    console.log({ systemPrompt, input })
 
     const stream = await OpenAIChatStream(
       {
@@ -27,6 +27,7 @@ ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
           { role: 'system', content: systemPrompt },
           { role: 'user', content: input },
         ],
+        max_tokens: 2000,
       },
       {
         onComplete: (message) => {

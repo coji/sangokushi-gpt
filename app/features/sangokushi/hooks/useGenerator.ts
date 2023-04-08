@@ -14,6 +14,7 @@ export const useGenerator = () => {
     isError: false,
     isSuccess: false,
   })
+  const abortController = new AbortController()
 
   const generate = async (input: string) => {
     setState({ isLoading: true, isError: false, isSuccess: false })
@@ -23,13 +24,18 @@ export const useGenerator = () => {
     formData.set('input', input)
 
     try {
+      console.log('fetch', abortController)
+
       const response = await fetch('/api/generate', {
         method: 'POST',
         body: formData,
+        signal: abortController.signal,
       }).catch((e) => {
         console.log('fetch error:', e)
         return null
       })
+
+      console.log('fetch done', abortController)
 
       if (!response || !response.ok) {
         throw new Error(response?.statusText)
@@ -65,10 +71,17 @@ export const useGenerator = () => {
     }
   }
 
+  const abort = () => {
+    console.log('abort', abortController)
+    abortController.abort()
+    console.log('aborted', abortController)
+  }
+
   return {
     data,
     error,
     ...state,
     generate,
+    abort,
   }
 }
