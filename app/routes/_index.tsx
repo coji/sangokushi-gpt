@@ -64,7 +64,7 @@ export default function Index() {
 
       <Container py="4" px="2" maxW="container.lg" position="relative">
         <Stack>
-          <Form onSubmit={(e) => handleFormSubmit(e)}>
+          <Form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
             <HStack align="end">
               <FormControl>
                 <Input
