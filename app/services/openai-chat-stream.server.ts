@@ -5,7 +5,7 @@ invariant(process.env.OPENAI_API_KEY, 'OPENAI_API_KEY should defined')
 
 type Role = 'system' | 'user' | 'assistant'
 
-interface OpenAIMessage {
+export interface OpenAIMessage {
   role: Role
   content: string
 }
@@ -21,18 +21,21 @@ interface OpenAIStreamPayload {
 }
 
 interface OpenAIChatResponseData {
-  choices: { delta: Partial<OpenAIMessage> }[]
+  choices: {
+    index: number
+    finish_reason: 'stop' | null
+    delta: { content?: string }
+  }[]
 }
 
 interface OpenAIChatStreamOptions {
-  onComplete?: (message: string) => void
+  onComplete?: (message: string, start?: Date, finish?: Date) => void
 }
 
 export const OpenAIChatStream = async (
   {
-    model = 'gpt-3.5-turbo',
-    temperature = 0.7,
-    top_p = 1,
+    model = 'gpt-3.5-turbo-0301',
+    temperature = 0,
     frequency_penalty = 0,
     presence_penalty = 0,
     max_tokens = 800,
@@ -49,7 +52,6 @@ export const OpenAIChatStream = async (
     body: JSON.stringify({
       model,
       temperature,
-      top_p,
       frequency_penalty,
       presence_penalty,
       max_tokens,
@@ -66,27 +68,28 @@ export const OpenAIChatStream = async (
   const encoder = new TextEncoder()
   const decoder = new TextDecoder()
   let message = ''
-  let counter = 0
+  const start = new Date()
 
   const stream = new ReadableStream({
     async start(controller) {
       function onEvent(event: ParsedEvent | ReconnectInterval) {
         if (event.type === 'event') {
           const data = event.data
-          if (data === '[DONE]') {
-            controller.close()
-            options.onComplete?.(message)
-            return
-          }
           try {
             const { choices } = JSON.parse(data) as OpenAIChatResponseData
             const text = choices[0].delta.content
-            if (!text || (counter < 2 && (text.match(/\n/) || []).length)) {
+            if (text === undefined) {
+              // なぜか冒頭にもundefinedが入ってくるので、finish_reason で判別
+              if (choices[0].finish_reason === 'stop') {
+                // 完了
+                const finish = new Date()
+                controller.close()
+                options.onComplete?.(message, start, finish)
+              }
               return
             }
             message += text
             controller.enqueue(encoder.encode(text))
-            counter++
           } catch (e) {
             controller.error(e)
           }
