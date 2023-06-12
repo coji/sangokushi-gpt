@@ -12,12 +12,12 @@ import {
   PopoverTrigger,
   Text,
 } from '@chakra-ui/react'
+import { type section } from '@prisma/client'
 import React from 'react'
 import nl2br from 'react-nl2br'
-import { type Section } from 'types/model'
 
 interface SectionReferenceProps {
-  section: Partial<Section>
+  section: Partial<section>
   children: React.ReactNode
 }
 export const SectionReference = ({
@@ -28,7 +28,7 @@ export const SectionReference = ({
     <React.Fragment key={section.id}>
       {children}
 
-      <Text color="gray.700">吉川英治 「三国志」 {section.volumeTitle}</Text>
+      <Text color="gray.700">吉川英治 「三国志」 {section.volume_title}</Text>
 
       <Popover trigger="hover">
         <PopoverTrigger>
@@ -41,9 +41,9 @@ export const SectionReference = ({
           <PopoverCloseButton />
           <PopoverHeader>
             <HStack>
-              <Text noOfLines={1}>{section.chapterNumber}</Text>
-              <Text noOfLines={1}>{section.chapterTitle}</Text>
-              <Text noOfLines={1}>{section.sectionNumber}</Text>
+              <Text noOfLines={1}>{section.chapter_number}</Text>
+              <Text noOfLines={1}>{section.chapter_title}</Text>
+              <Text noOfLines={1}>{section.section_number}</Text>
               <Button
                 as="a"
                 rightIcon={<ExternalLinkIcon />}

@@ -1,7 +1,7 @@
 import { type ActionArgs } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { OpenAIChatStream } from '~/services/openai-chat-stream.server'
-import { vectorSearch } from '../services/vector-search.server'
+import { vectorSearchPg } from '../services/vector-search.server'
 
 export const action = async ({ request }: ActionArgs) => {
   try {
@@ -9,7 +9,7 @@ export const action = async ({ request }: ActionArgs) => {
     const input = formData.get('input')?.toString()
     invariant(input, 'Missing input')
 
-    const vectors = await vectorSearch(input)
+    const vectors = await vectorSearchPg(input)
 
     const systemPrompt = `
 You are a professional novelist.

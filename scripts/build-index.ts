@@ -24,7 +24,8 @@ const main = async () => {
       await $`tsx scripts/convert/embed.ts`
     })
     .with('build-index', async () => {
-      await $`tsx scripts/convert/qdrant-upsert-index.ts`
+      //      await $`tsx scripts/convert/qdrant-upsert-index.ts`
+      await $`tsx scripts/convert/database-import.ts`
     })
     .otherwise(() => {
       argv.showHelp()

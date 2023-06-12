@@ -1,0 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [pgvector(map: "vector", schema: "public")]
+}
+
+model section {
+  id                String                       @id
+  volume_title      String
+  chapter_number    Int
+  chapter_title     String
+  section_number    String
+  start_line_number Int
+  content           String
+  vector            Unsupported("vector(1536)")?
+}

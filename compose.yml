@@ -1,12 +1,28 @@
 version: '3.7'
 services:
-  qdrant:
-    build:
-      context: qdrant
-      args:
-        - ENV=development
+  # qdrant:
+  #   build:
+  #     context: qdrant
+  #     args:
+  #       - ENV=development
+  #   restart: always
+  #   ports:
+  #     - 6333:6333
+  #   volumes:
+  #     - ./qdrant-storage:/qdrant/storage
+  db:
+    image: ankane/pgvector:latest
     restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
-      - 6333:6333
+      - '5432:5432'
     volumes:
-      - ./qdrant-storage:/qdrant/storage
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: 'pg_isready --username=postgres'
+      interval: 10s
+      timeout: 5s
+      retries: 5

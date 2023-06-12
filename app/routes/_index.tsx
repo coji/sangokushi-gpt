@@ -18,7 +18,7 @@ import React from 'react'
 import nl2br from 'react-nl2br'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
-import { vectorSearch } from '~/features/sangokushi/services/vector-search.server'
+import { vectorSearchPg } from '~/features/sangokushi/services/vector-search.server'
 
 export const loader = ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -30,13 +30,13 @@ export const loader = ({ request }: LoaderArgs) => {
         result: [],
         usage: 0,
       } as {
-        result: Awaited<ReturnType<typeof vectorSearch>>['result']['0'][]
+        result: Awaited<ReturnType<typeof vectorSearchPg>>['result']['0'][]
         usage: number
       },
     })
   }
 
-  const vectorResult = vectorSearch(input, 10)
+  const vectorResult = vectorSearchPg(input, 10)
   return defer({ input, vectorResult })
 }
 
