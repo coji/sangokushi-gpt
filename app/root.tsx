@@ -1,5 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import type { V2_MetaFunction } from '@remix-run/node'
+import { json, type V2_MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
+import { keepAwake } from './services/shrink-to-zero.server'
 
 export const meta: V2_MetaFunction = () => [
   { title: '三国志 GPT' },
@@ -33,11 +34,12 @@ export const meta: V2_MetaFunction = () => [
   { property: 'og:twitter:site', content: '@techtalkjp' },
 ]
 
-interface DocumentProps {
-  children: React.ReactNode
+export const loader = () => {
+  keepAwake()
+  return json({})
 }
 
-const Document = ({ children }: DocumentProps) => {
+export default function App() {
   return (
     <html lang="ja">
       <head>
@@ -45,21 +47,13 @@ const Document = ({ children }: DocumentProps) => {
         <Links />
       </head>
       <body>
-        {children}
+        <ChakraProvider resetCSS>
+          <Outlet />
+        </ChakraProvider>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
       </body>
     </html>
-  )
-}
-
-export default function App() {
-  return (
-    <Document>
-      <ChakraProvider resetCSS>
-        <Outlet />
-      </ChakraProvider>
-    </Document>
   )
 }
