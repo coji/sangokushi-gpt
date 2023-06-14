@@ -34,8 +34,8 @@ interface OpenAIChatStreamOptions {
 
 export const OpenAIChatStream = async (
   {
-    model = 'gpt-3.5-turbo-0301',
-    temperature = 0,
+    model = 'gpt-3.5-turbo-0613',
+    temperature = 0.5,
     frequency_penalty = 0,
     presence_penalty = 0,
     max_tokens = 800,
