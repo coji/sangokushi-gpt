@@ -1,7 +1,18 @@
 import { prisma } from '~/services/database.server'
 
 export const similarSections = async (vector: number[], limit: number) => {
-  const ret = await prisma.$queryRaw`
+  const ret = await prisma.$queryRaw<
+    {
+      id: string
+      volume_title: string
+      chapter_number: number
+      chapter_title: string
+      section_number: string
+      start_line_number: number
+      content: string
+      distance: number
+    }[]
+  >`
 SELECT
   id,
   volume_title,
@@ -18,14 +29,5 @@ ORDER BY
 LIMIT
   ${limit}
 `
-  return ret as {
-    id: string
-    volume_title: string
-    chapter_number: number
-    chapter_title: string
-    section_number: string
-    start_line_number: number
-    content: string
-    distance: number
-  }[]
+  return ret
 }
