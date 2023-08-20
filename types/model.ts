@@ -8,6 +8,5 @@ export interface Section {
   sectionNumber: string
   startLineNumber: number
   content: string
-  vector: number[]
-  usage: number
+  vector: string
 }

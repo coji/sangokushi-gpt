@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import { createEmbedding } from 'scripts/services/embed'
 import type { Section } from 'types/model'
+import { fetchEmbedding } from '~/services/simcse-embedding.server'
 dotenv.config()
 
 const main = async () => {
@@ -15,13 +15,13 @@ const main = async () => {
     fs.mkdirSync(outputDir)
   }
 
-  const { embedText } = createEmbedding()
   const embeddedSections: Section[] = []
 
   for (const file of files) {
-    const sections = JSON.parse(
-      fs.readFileSync(path.join(inputDir, file), 'utf-8'),
-    ) as Omit<Section, 'vector' | 'usage'>[]
+    const sections = JSON.parse(fs.readFileSync(path.join(inputDir, file), 'utf-8')) as Omit<
+      Section,
+      'vector' | 'usage'
+    >[]
 
     for (const section of sections) {
       let count = 0
@@ -31,10 +31,9 @@ const main = async () => {
           count++
 
           console.log('Embedding section: ', section.id)
-          const { embedding, usage } = await embedText(section.content)
+          const { embedding } = await fetchEmbedding(section.content)
           const embeddedSection = {
             vector: embedding,
-            usage: usage.total_tokens,
             ...section,
           }
           console.log({
@@ -44,7 +43,6 @@ const main = async () => {
             chapterNumber: embeddedSection.chapterNumber,
             chapterTitle: embeddedSection.chapterTitle,
             sectionNumber: embeddedSection.sectionNumber,
-            usage: embeddedSection.usage,
           })
           embeddedSections.push(embeddedSection)
           done = true

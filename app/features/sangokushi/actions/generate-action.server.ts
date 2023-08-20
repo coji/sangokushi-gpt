@@ -53,7 +53,7 @@ ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
     )
     return stream
   } catch (error) {
-    console.error('nickname generate action error: ', error)
+    console.error('generate action error: ', error)
     return new Response('Something went wrong', { status: 500 })
   }
 }

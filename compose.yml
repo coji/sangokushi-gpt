@@ -10,6 +10,15 @@ services:
       - 6333:6333
     volumes:
       - ./qdrant-storage:/qdrant/storage
+
+  embedding-api:
+    image: coji/simcse-embedding-api:latest
+    restart: always
+    ports:
+      - 8000:8000
+    volumes:
+      - ./embedding-api-cache:/root/.cache
+
   db:
     image: postgres:latest
     restart: always
