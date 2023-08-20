@@ -2,9 +2,8 @@
 FROM node:18-slim as base
 ARG PNPM_VERSION=8.6.1
 
-# Install openssl for Prisma
 RUN apt-get update \
-  && apt-get install --no-install-recommends -y openssl openssh-client procps vim-tiny \
+  && apt-get install --no-install-recommends -y procps vim-tiny \
   && apt-get clean \
   && npm i -g pnpm@${PNPM_VERSION} \
   && rm -rf /var/lib/apt/lists/*
@@ -38,9 +37,6 @@ COPY --from=deps /app/node_modules /app/node_modules
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --offline --frozen-lockfile
 
-COPY prisma .
-RUN pnpm exec prisma generate
-
 COPY . .
 RUN pnpm run build
 
@@ -54,7 +50,6 @@ WORKDIR /app
 COPY --from=production-deps /app/package.json /app/package.json
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/tsconfig.json /app/tsconfig.json
-COPY --from=build /app/prisma /app/prisma
 COPY --from=build /app/build /app/build
 COPY --from=build /app/public /app/public
 
