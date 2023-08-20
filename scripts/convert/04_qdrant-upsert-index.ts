@@ -1,7 +1,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import { createQdrant } from 'scripts/services/qdrant'
-import type { Section } from 'types/model'
+import type { Section } from '~/types/model'
 const qdrant = createQdrant(process.env.QDRANT_HOST ?? '127.0.0.1', 6333)
 
 const initialize = async (index: string) => {
@@ -27,7 +27,7 @@ const main = async (index: string) => {
         const { id, vector, ...rest } = section
         return {
           id,
-          vector: JSON.parse(`[${vector}]`),
+          vector,
           payload: {
             ...rest,
           },

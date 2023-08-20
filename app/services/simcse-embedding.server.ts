@@ -7,6 +7,6 @@ export const fetchEmbedding = async (sentence: string) => {
     throw new Error(res.statusText)
   }
 
-  const result = (await res.json()) as { sentence: string; embedding: string }
+  const result = (await res.json()) as { sentence: string; embedding: number[] }
   return result
 }

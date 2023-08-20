@@ -3,29 +3,19 @@ import { match } from 'ts-pattern'
 import { $ } from 'zx'
 
 const argv = cli({
-  name: 'build-index',
-  commands: [
-    command({ name: 'cleanup' }),
-    command({ name: 'structure' }),
-    command({ name: 'embed' }),
-    command({ name: 'build-index' }),
-  ],
+  commands: [command({ name: 'cleanup' }), command({ name: 'structure' }), command({ name: 'embed' })],
 })
 
 const main = async () => {
   await match(argv.command)
     .with('cleanup', async () => {
-      await $`tsx scripts/convert/clean.ts`
+      await $`tsx scripts/convert/01_clean.ts`
     })
     .with('structure', async () => {
-      await $`tsx scripts/convert/structure.ts`
+      await $`tsx scripts/convert/02_structure.ts`
     })
     .with('embed', async () => {
-      await $`tsx scripts/convert/embed.ts`
-    })
-    .with('build-index', async () => {
-      //      await $`tsx scripts/convert/qdrant-upsert-index.ts`
-      await $`tsx scripts/convert/database-import.ts`
+      await $`tsx scripts/convert/03_embed.ts`
     })
     .otherwise(() => {
       argv.showHelp()

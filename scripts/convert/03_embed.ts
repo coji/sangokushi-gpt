@@ -1,8 +1,8 @@
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import type { Section } from 'types/model'
 import { fetchEmbedding } from '~/services/simcse-embedding.server'
+import type { Section } from '~/types/model'
 dotenv.config()
 
 const main = async () => {

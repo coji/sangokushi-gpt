@@ -8,5 +8,5 @@ export interface Section {
   sectionNumber: string
   startLineNumber: number
   content: string
-  vector: string
+  vector: number[]
 }

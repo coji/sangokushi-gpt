@@ -1,12 +1,12 @@
-import { type section } from '@prisma/client'
 import { Link } from '@remix-run/react'
 import { ExternalLinkIcon } from 'lucide-react'
 import React from 'react'
 import nl2br from 'react-nl2br'
 import { Button, Card, CardContent, CardHeader, HStack, Popover, PopoverContent, PopoverTrigger } from '~/components/ui'
+import type { Section } from '~/types/model'
 
 interface SectionReferenceProps {
-  section: Partial<section>
+  section: Partial<Section>
   children: React.ReactNode
 }
 export const SectionReference = ({ section, children }: SectionReferenceProps) => {
@@ -14,7 +14,7 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
     <React.Fragment key={section.id}>
       {children}
 
-      <p className="text-slate-700">吉川英治 「三国志」 {section.volume_title}</p>
+      <p className="text-slate-700">吉川英治 「三国志」 {section.volumeTitle}</p>
 
       <Popover>
         <PopoverTrigger asChild>
@@ -26,9 +26,9 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
           <Card>
             <CardHeader>
               <HStack>
-                <p>{section.chapter_number}</p>
-                <p>{section.chapter_title}</p>
-                <p>{section.section_number}</p>
+                <p>{section.chapterNumber}</p>
+                <p>{section.chapterTitle}</p>
+                <p>{section.sectionNumber}</p>
                 <Button asChild size="sm" variant="outline">
                   <ExternalLinkIcon className="mr-2" />
                   <Link

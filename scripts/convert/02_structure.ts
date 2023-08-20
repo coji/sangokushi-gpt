@@ -2,7 +2,7 @@ import { encoding_for_model } from '@dqbd/tiktoken'
 import fs from 'fs'
 import path from 'path'
 import { hashChunk } from 'scripts/utils/hashChunk'
-import type { Section } from 'types/model'
+import type { Section } from '~/types/model'
 import { parseText } from '../utils/parseText'
 
 const inputDir = 'data/sangokushi_cleaned'
