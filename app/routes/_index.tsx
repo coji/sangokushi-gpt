@@ -1,24 +1,11 @@
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  FormControl,
-  Grid,
-  HStack,
-  Heading,
-  Input,
-  Link,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
 import { defer, type LoaderArgs } from '@remix-run/node'
-import { Await, Form, useLoaderData } from '@remix-run/react'
+import { Await, Form, Link, useLoaderData } from '@remix-run/react'
 import React from 'react'
 import nl2br from 'react-nl2br'
+import { Button, Heading, HStack, Input, Stack } from '~/components/ui'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
-import { vectorSearchPg } from '~/features/sangokushi/services/vector-search.server'
+import { vectorSearchQdrant } from '~/features/sangokushi/services/vector-search.server'
 
 export const loader = ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
@@ -30,13 +17,13 @@ export const loader = ({ request }: LoaderArgs) => {
         result: [],
         usage: 0,
       } as {
-        result: Awaited<ReturnType<typeof vectorSearchPg>>['result']['0'][]
+        result: Awaited<ReturnType<typeof vectorSearchQdrant>>['result']['0'][]
         usage: number
       },
     })
   }
 
-  const vectorResult = vectorSearchPg(input, 10)
+  const vectorResult = vectorSearchQdrant(input, 10)
   return defer({ input, vectorResult })
 }
 
@@ -52,67 +39,40 @@ export default function Index() {
   }
 
   return (
-    <Box
-      bgColor="gray.100"
-      minH="100dvh"
-      display="grid"
-      gridTemplateRows="auto 1fr auto"
-    >
-      <Box textAlign="center" bgColor="white" px="2" py="4">
+    <div className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-slate-200">
+      <header className="container bg-background py-2">
         <Heading>三国志 GPT</Heading>
-      </Box>
+      </header>
 
-      <Container py="4" px="2" maxW="container.lg" position="relative">
+      <main className="container relative py-4">
         <Stack>
           <Form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
-            <HStack align="end">
-              <FormControl>
-                <Input
-                  bgColor="white"
-                  name="input"
-                  autoFocus
-                  placeholder="劉備と関羽が出会ったシーンは？"
-                  defaultValue={loaderData.input}
-                />
-              </FormControl>
-              <Button
-                colorScheme="blue"
-                type="submit"
-                isLoading={generator.isLoading}
-              >
+            <HStack>
+              <Input
+                className="w-full flex-1"
+                name="input"
+                autoFocus
+                placeholder="劉備と関羽が出会ったシーンは？"
+                defaultValue={loaderData.input}
+              />
+              <Button variant="default" type="submit" disabled={generator.isLoading}>
                 Query
               </Button>
             </HStack>
           </Form>
 
-          <Flex justify="end">
-            <React.Suspense
-              fallback={
-                <Text color="gray.700" fontSize="sm">
-                  Loading..
-                </Text>
-              }
-            >
-              <Await
-                resolve={loaderData.vectorResult}
-                errorElement={<div>Error</div>}
-              >
+          <div className="flex justify-end">
+            <React.Suspense fallback={<p>Loading..</p>}>
+              <Await resolve={loaderData.vectorResult} errorElement={<div>Error</div>}>
                 {(vectorResult) => (
-                  <HStack fontSize="sm" align="center" flexWrap="wrap">
+                  <HStack>
                     {vectorResult.result.slice(0, 1).map((result) => {
                       return (
-                        <SectionReference
-                          key={result.id}
-                          section={result.section}
-                        >
-                          <Box
-                            fontSize="xs"
-                            fontWeight="extrabold"
-                            color="green.500"
-                          >
+                        <SectionReference key={result.id} section={result.section}>
+                          <div className="text-xs font-extrabold text-green-500">
                             {Math.round(result.score * 1000) / 10}
                             <small>%</small> Match
-                          </Box>
+                          </div>
                         </SectionReference>
                       )
                     })}
@@ -120,45 +80,23 @@ export default function Index() {
                 )}
               </Await>
             </React.Suspense>
-          </Flex>
+          </div>
 
-          <Grid gridTemplateColumns="auto auto 1fr" gap="4">
-            {nl2br(generator.data)}
-          </Grid>
+          <div className="grid grid-cols-[auto_auto_1fr] gap-4">{nl2br(generator.data)}</div>
         </Stack>
+      </main>
 
-        {/* <Box position="absolute" bottom="0">
-          <Button
-            colorScheme="red"
-            variant="outline"
-            onClick={() => {
-              generator.abort()
-            }}
-          >
-            生成をキャンセル
-          </Button>
-        </Box> */}
-      </Container>
-
-      <Box textAlign="center" px="2" py="4" bgColor="white">
+      <footer className="container bg-background py-2 text-center">
         Copyright &copy; {new Date().getFullYear()}{' '}
-        <Link
-          href="https://twitter.com/techtalkjp/"
-          target="_blank"
-          color="blue.500"
-        >
+        <Link to="https://twitter.com/techtalkjp/" target="_blank" color="blue.500">
           coji
         </Link>
-        <Box>
-          <Link
-            href="https://github.com/coji/sangokushi-gpt"
-            target="_blank"
-            color="blue.500"
-          >
+        <div>
+          <Link to="https://github.com/coji/sangokushi-gpt" target="_blank" color="blue.500">
             GitHub
           </Link>
-        </Box>
-      </Box>
-    </Box>
+        </div>
+      </footer>
+    </div>
   )
 }

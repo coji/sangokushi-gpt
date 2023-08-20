@@ -41,7 +41,7 @@ reset: clean setup
 
 # ローカル開発サーバを起動
 dev:
-	docker compose up -d db
+	docker compose up -d qdrant db
 	pnpm run dev
 
 

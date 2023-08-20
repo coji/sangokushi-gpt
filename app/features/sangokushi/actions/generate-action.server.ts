@@ -1,7 +1,7 @@
 import { type ActionArgs } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { OpenAIChatStream } from '~/services/openai-chat-stream.server'
-import { vectorSearchPg } from '../services/vector-search.server'
+import { vectorSearchQdrant } from '../services/vector-search.server'
 
 export const action = async ({ request }: ActionArgs) => {
   try {
@@ -9,7 +9,7 @@ export const action = async ({ request }: ActionArgs) => {
     const input = formData.get('input')?.toString()
     invariant(input, 'Missing input')
 
-    const vectors = await vectorSearchPg(input)
+    const vectors = await vectorSearchQdrant(input)
 
     const systemPrompt = `
 You are a professional novelist.
@@ -34,7 +34,7 @@ ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
 - All output must be in Japanese.
 
 `
-    console.log({ systemPrompt, input })
+    //    console.log({ systemPrompt, input })
 
     const stream = await OpenAIChatStream(
       {
@@ -47,7 +47,7 @@ ${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
       },
       {
         onComplete: (message) => {
-          console.log({ input, message })
+          //          console.log({ input, message })
         },
       },
     )

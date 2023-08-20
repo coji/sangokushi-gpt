@@ -1,13 +1,6 @@
 export const SangokushiLogo = () => {
   return (
-    <svg
-      version="1.1"
-      xmlns="http://www.w3.org/2000/svg"
-      x="0px"
-      y="0px"
-      viewBox="0 0 600 240"
-      fill="currentColor"
-    >
+    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 600 240" fill="currentColor">
       <g>
         <path
           d="M219.334,65.128c0.526,0.24,0.82,0.375,1.376,0.629c0.239-1.328,0.465-2.579,0.738-4.098

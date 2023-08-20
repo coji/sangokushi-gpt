@@ -1,6 +1,3 @@
--- CreateExtension
-CREATE EXTENSION IF NOT EXISTS "vector" WITH SCHEMA "public";
-
 -- CreateTable
 CREATE TABLE "section" (
     "id" TEXT NOT NULL,
@@ -10,7 +7,6 @@ CREATE TABLE "section" (
     "section_number" TEXT NOT NULL,
     "start_line_number" INTEGER NOT NULL,
     "content" TEXT NOT NULL,
-    "vector" vector(1536),
 
     CONSTRAINT "section_pkey" PRIMARY KEY ("id")
 );

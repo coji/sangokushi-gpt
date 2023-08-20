@@ -1,14 +1,8 @@
-import { ChakraProvider } from '@chakra-ui/react'
-import { json, type V2_MetaFunction } from '@remix-run/node'
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from '@remix-run/react'
+import { json, type LinksFunction, type LoaderArgs, type V2_MetaFunction } from '@remix-run/node'
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import { createHead } from 'remix-island'
 import { keepAwake } from './services/shrink-to-zero.server'
+import globalStyles from './styles/globals.css'
 
 export const meta: V2_MetaFunction = () => [
   { title: '三国志 GPT' },
@@ -34,26 +28,28 @@ export const meta: V2_MetaFunction = () => [
   { property: 'og:twitter:site', content: '@techtalkjp' },
 ]
 
-export const loader = () => {
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: globalStyles }]
+
+export const loader = ({ request }: LoaderArgs) => {
   keepAwake()
   return json({})
 }
 
+export const Head = createHead(() => (
+  <>
+    <Meta />
+    <Links />
+  </>
+))
+
 export default function App() {
   return (
-    <html lang="ja">
-      <head>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <ChakraProvider resetCSS>
-          <Outlet />
-        </ChakraProvider>
-        <ScrollRestoration />
-        <Scripts />
-        <LiveReload />
-      </body>
-    </html>
+    <>
+      <Head />
+      <Outlet />
+      <ScrollRestoration />
+      <Scripts />
+      <LiveReload />
+    </>
   )
 }

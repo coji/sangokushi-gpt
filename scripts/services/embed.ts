@@ -1,20 +1,23 @@
-import { Configuration, OpenAIApi } from 'openai'
+import { OpenAI } from 'openai'
 
 export const createEmbedding = () => {
   const embedText = async (text: string) => {
-    const configuration = new Configuration({
+    const api = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY,
+      organization: process.env.OPENAI_API_ORGANIZATION_ID,
+      fetch,
     })
-    const api = new OpenAIApi(configuration)
 
-    const ret = await api.createEmbedding({
-      model: 'text-embedding-ada-002',
-      input: text,
-    })
+    const ret =await  api.embeddings.create(
+      {
+        model: 'text-embedding-ada-002',
+        input: text
+      },
+    )
 
     return {
-      embedding: ret.data.data[0].embedding,
-      usage: ret.data.usage,
+      embedding: ret.data[0].embedding,
+      usage: ret.usage,
     }
   }
   return { embedText }
