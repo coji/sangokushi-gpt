@@ -2,6 +2,8 @@ import { json, type LoaderArgs } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
 import React from 'react'
 import nl2br from 'react-nl2br'
+import { z } from 'zod'
+import { zx } from 'zodix'
 import { AppLayout } from '~/components/AppLayout'
 import { Button, HStack, Input, Stack } from '~/components/ui'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
@@ -9,8 +11,7 @@ import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
 import { vectorSearchQdrant } from '~/features/sangokushi/services/vector-search.server'
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const url = new URL(request.url)
-  const input = url.searchParams.get('input')
+  const { input } = zx.parseQuery(request, { input: z.string().optional() })
   if (!input) {
     return json<{ input: string; vectorResult: Awaited<ReturnType<typeof vectorSearchQdrant>>[number][] }>({
       input: '',
@@ -18,9 +19,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     })
   }
 
-  console.time('vector search')
   const vectorResult = await vectorSearchQdrant(input, 1)
-  console.timeEnd('vector search')
   return json({ input, vectorResult })
 }
 
@@ -28,11 +27,12 @@ export default function Index() {
   const { vectorResult, input } = useLoaderData<typeof loader>()
   const generator = useGenerator()
 
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    // e.preventDefault() // submit も実際にすることで、URL にクエリパラメータを追加する
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget)
-    const input = String(formData.get('input'))
-    void generator.generate(input) // ストリーミングで生成
+    const { input } = await zx.parseForm(formData, { input: z.string().optional() })
+    if (input) {
+      void generator.generate(input) // ストリーミングで生成
+    }
   }
 
   return (
@@ -68,7 +68,7 @@ export default function Index() {
           </HStack>
         </div>
 
-        <div className="grid grid-cols-[auto_auto_1fr] gap-4">{nl2br(generator.data)}</div>
+        <>{generator.isError ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}</>
       </Stack>
     </AppLayout>
   )
