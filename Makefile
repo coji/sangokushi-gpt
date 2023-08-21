@@ -11,9 +11,7 @@ endif
 ifeq ($(PNPM_EXISTS),) # pnpm が存在する場合は admin, crawler の node パッケージをインストール (vscode用)
 	@echo "pnpm コマンドが存在しません。"
 else
-	docker compose up -d db
 	pnpm i --frozen-lockfile
-	pnpm run setup
 	pnpm run build
 endif
 
@@ -26,22 +24,16 @@ env:
 # すべてのコンテナ、イメージ、ボリュームを削除
 clean:
 	docker compose down --rmi all --volumes --remove-orphans
-	rm -Rf postgres-data data
+	rm -Rf qdrant-data embedding-api-cache
 
 
 # 再セットアップ
-reset: clean setup
-
-
-# DBシード
-#seed:
-	docker compose up -d db
-	pnpm run seed
+reset: clean
 
 
 # ローカル開発サーバを起動
 dev:
-	docker compose up -d qdrant db embedding-api
+	docker compose up -d qdrant embedding-api
 	pnpm run dev
 
 

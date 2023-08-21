@@ -26,7 +26,7 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
             <p>{section.chapterTitle}</p>
             <p>{section.sectionNumber}</p>
           </HStack>
-          <div className="h-[20rem] overflow-auto">{nl2br(section.content)}</div>
+          <div className="h-[20rem] overflow-auto text-sm">{nl2br(section.content)}</div>
         </PopoverContent>
       </Popover>
     </React.Fragment>
