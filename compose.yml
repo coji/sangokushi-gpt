@@ -14,24 +14,10 @@ services:
   embedding-api:
     image: coji/simcse-embedding-api:latest
     restart: always
+    environment:
+      - PORT=8080
+      - HOST=0.0.0.0
     ports:
-      - 8000:8000
+      - 8080:8080
     volumes:
       - ./embedding-api-cache:/root/.cache
-
-  db:
-    image: postgres:latest
-    restart: always
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=postgres
-    ports:
-      - '5432:5432'
-    volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-    healthcheck:
-      test: 'pg_isready --username=postgres'
-      interval: 10s
-      timeout: 5s
-      retries: 5

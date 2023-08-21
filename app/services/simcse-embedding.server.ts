@@ -1,5 +1,5 @@
 export const fetchEmbedding = async (sentence: string) => {
-  const res = await fetch(`http://localhost:8000/embedding?sentence=${encodeURIComponent(sentence)}`, {
+  const res = await fetch(`${process.env.EMBEDDING_API_HOST}/embedding?sentence=${encodeURIComponent(sentence)}`, {
     method: 'GET',
   })
 

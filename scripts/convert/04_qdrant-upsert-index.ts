@@ -1,6 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
-import { createQdrant } from 'scripts/services/qdrant'
+import { createQdrant } from '~/services/qdrant.server'
 import type { Section } from '~/types/model'
 const qdrant = createQdrant(process.env.QDRANT_HOST ?? '127.0.0.1', 6333)
 
