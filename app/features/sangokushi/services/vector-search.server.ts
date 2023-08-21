@@ -19,11 +19,9 @@ export const vectorSearchQdrant = async (input: string, top = 1) => {
   const { embedding } = await fetchEmbedding(input)
 
   const searchResult = await qdrantQuery(embedding, top)
-  return {
-    result: searchResult.result.map((result) => ({
-      id: result.id,
-      score: result.score,
-      section: result.payload as SangokushiPayload,
-    })),
-  }
+  return searchResult.result.map((result) => ({
+    id: result.id,
+    score: result.score,
+    section: result.payload as SangokushiPayload,
+  }))
 }

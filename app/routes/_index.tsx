@@ -12,18 +12,14 @@ export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url)
   const input = url.searchParams.get('input')
   if (!input) {
-    return json({
+    return json<{ input: string; vectorResult: Awaited<ReturnType<typeof vectorSearchQdrant>>[number][] }>({
       input: '',
-      vectorResult: {
-        result: [],
-      } as {
-        result: Awaited<ReturnType<typeof vectorSearchQdrant>>['result'][number][]
-      },
+      vectorResult: [],
     })
   }
 
   console.time('vector search')
-  const vectorResult = await vectorSearchQdrant(input, 10)
+  const vectorResult = await vectorSearchQdrant(input, 1)
   console.timeEnd('vector search')
   return json({ input, vectorResult })
 }
@@ -59,10 +55,10 @@ export default function Index() {
 
         <div className="flex justify-end">
           <HStack>
-            {vectorResult.result.slice(0, 1).map((result) => {
+            {vectorResult.slice(0, 1).map((result) => {
               return (
                 <SectionReference key={result.id} section={result.section}>
-                  <div className="text-xs font-extrabold text-green-500">
+                  <div className="text-xs font-bold">
                     {Math.round(result.score * 1000) / 10}
                     <small>%</small> Match
                   </div>

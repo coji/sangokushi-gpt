@@ -29,7 +29,7 @@ Create a short story that meets the user's request.
  - Use the following context as much as possible:
 
 Context:
-${vectors.result.map((ret) => `${ret.section.content}`).join('\n')}
+${vectors.map((ret) => `${ret.section.content}`).join('\n')}
 
 - All output must be in Japanese.
 
