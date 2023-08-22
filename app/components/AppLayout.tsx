@@ -15,37 +15,41 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-slate-200">
-      <header className="container flex items-center bg-background py-2">
-        <HStack>
-          <Heading>
-            <Link to="/">三国志 GPT</Link>
-          </Heading>
+      <header className="flex items-center bg-background py-2">
+        <div className="container">
+          <HStack>
+            <Heading>
+              <Link to="/">三国志 GPT</Link>
+            </Heading>
 
-          <Tabs
-            value={tab}
-            onValueChange={(val) => {
-              navigate(val)
-            }}
-          >
-            <TabsList>
-              <TabsTrigger value="/">ストーリー生成</TabsTrigger>
-              <TabsTrigger value="/search">検索</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </HStack>
+            <Tabs
+              value={tab}
+              onValueChange={(val) => {
+                navigate(val)
+              }}
+            >
+              <TabsList>
+                <TabsTrigger value="/">ストーリー生成</TabsTrigger>
+                <TabsTrigger value="/search">検索</TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </HStack>
+        </div>
       </header>
 
       <main className="container relative py-4">{children}</main>
 
-      <footer className="container bg-background py-2 text-center">
-        Copyright &copy; {new Date().getFullYear()}{' '}
-        <Link to="https://twitter.com/techtalkjp/" target="_blank" color="blue.500">
-          coji
-        </Link>
-        <div>
-          <Link to="https://github.com/coji/sangokushi-gpt" target="_blank" color="blue.500">
-            GitHub
+      <footer className="bg-background py-2 text-center">
+        <div className="container">
+          Copyright &copy; {new Date().getFullYear()}{' '}
+          <Link to="https://twitter.com/techtalkjp/" target="_blank" color="blue.500">
+            coji
           </Link>
+          <div>
+            <Link to="https://github.com/coji/sangokushi-gpt" target="_blank" color="blue.500">
+              GitHub
+            </Link>
+          </div>
         </div>
       </footer>
     </div>
