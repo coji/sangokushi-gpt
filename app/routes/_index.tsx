@@ -68,7 +68,9 @@ export default function Index() {
           </HStack>
         </div>
 
-        {generator.error ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}
+        <div className="leading-8">
+          {generator.error ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}
+        </div>
       </Stack>
     </AppLayout>
   )

@@ -1,7 +1,6 @@
 import { encoding_for_model } from '@dqbd/tiktoken'
 import fs from 'fs'
 import path from 'path'
-import { hashChunk } from 'scripts/utils/hashChunk'
 import type { Section } from '~/types/model'
 import { parseText } from '../utils/parseText'
 
@@ -37,15 +36,15 @@ for (const file of files) {
 
   const data = fs.readFileSync(inputFilePath, 'utf-8')
   const fileChapters = parseText(data)
-
-  for (const chapter of fileChapters) {
+  fileChapters.forEach((chapter, index) => {
+    if (chapter.content.length < 100) return
     chapters.push({
-      id: hashChunk(chapter.content),
+      id: String(index),
       file: path.parse(file).name,
       tokens: encoder.encode(chapter.content).length,
       ...chapter,
     })
-  }
+  })
 }
 
 const outputFilePath = path.join(outputDir, 'sangokushi.json')

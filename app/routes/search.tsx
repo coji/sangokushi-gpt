@@ -62,9 +62,7 @@ export default function SearchPage() {
               <TableBody>
                 {result.map((r) => (
                   <TableRow key={r.document.id}>
-                    <TableCell>
-                      {r.document.id} {Math.round(r.score * 1000) / 10}
-                    </TableCell>
+                    <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
                     <TableCell>{r.document.volumeTitle}</TableCell>
                     <TableCell>{r.document.chapterTitle}</TableCell>
                     <TableCell className="max-w-sm truncate">{nl2br(r.document.content)}</TableCell>
