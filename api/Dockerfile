@@ -24,7 +24,7 @@ FROM rye AS run
 
 # App server port
 ENV PORT="8080"
-ENV HOST="::"
+ENV HOST="0.0.0.0"
 
 COPY --from=data /app/model ./model
 COPY server.py sangokushi.db ./
