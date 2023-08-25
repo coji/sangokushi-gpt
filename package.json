@@ -9,6 +9,7 @@
     "start": "remix-serve build",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc",
+    "validate": "run-p lint typecheck",
     "clean:files": "tsx scripts/cleanAndConvertFiles"
   },
   "dependencies": {
