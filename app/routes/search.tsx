@@ -1,5 +1,5 @@
 import { json, type LoaderArgs } from '@remix-run/node'
-import { Form, useLoaderData } from '@remix-run/react'
+import { Form, useLoaderData, useNavigation } from '@remix-run/react'
 import nl2br from 'react-nl2br'
 import { z } from 'zod'
 import { zx } from 'zodix'
@@ -29,11 +29,13 @@ export const loader = async ({ request }: LoaderArgs) => {
   }
 
   const result = await search(q)
+  console.log(result.length)
   return json({ query: q, result })
 }
 
 export default function SearchPage() {
   const { query, result } = useLoaderData<typeof loader>()
+  const navigation = useNavigation()
 
   return (
     <AppLayout>
@@ -41,7 +43,9 @@ export default function SearchPage() {
         <Form>
           <HStack>
             <Input autoFocus name="q" defaultValue={query} />
-            <Button>Search</Button>
+            <Button isLoading={navigation.state !== 'idle'} disabled={navigation.state !== 'idle'}>
+              Search
+            </Button>
           </HStack>
         </Form>
 
@@ -59,7 +63,9 @@ export default function SearchPage() {
               <TableBody>
                 {result.map((r) => (
                   <TableRow key={r.document.id}>
-                    <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
+                    <TableCell>
+                      {r.document.id} {Math.round(r.score * 1000) / 10}
+                    </TableCell>
                     <TableCell>{r.document.volumeTitle}</TableCell>
                     <TableCell>{r.document.chapterTitle}</TableCell>
                     <TableCell className="max-w-sm truncate">{nl2br(r.document.content)}</TableCell>

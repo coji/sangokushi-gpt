@@ -47,7 +47,7 @@ export default function Index() {
               placeholder="劉備と関羽が出会ったシーンは？"
               defaultValue={input}
             />
-            <Button variant="default" type="submit" disabled={generator.isLoading}>
+            <Button variant="default" type="submit" isLoading={generator.isLoading} disabled={generator.isLoading}>
               Query
             </Button>
           </HStack>

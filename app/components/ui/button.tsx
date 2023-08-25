@@ -23,10 +23,14 @@ const buttonVariants = cva(
         lg: 'h-11 rounded-md px-8',
         icon: 'h-10 w-10',
       },
+      isLoading: {
+        true: 'cursor-progress',
+      },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      isLoading: false,
     },
   },
 )
@@ -38,9 +42,17 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, isLoading, children, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button'
-    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
+    return (
+      <Comp className={cn(buttonVariants({ variant, size, isLoading, className }))} ref={ref} {...props}>
+        {isLoading ? (
+          <span className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></span>
+        ) : (
+          children
+        )}
+      </Comp>
+    )
   },
 )
 Button.displayName = 'Button'
