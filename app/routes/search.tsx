@@ -17,19 +17,19 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui'
-import { vectorSearchQdrant } from '~/features/sangokushi/services/vector-search.server'
+import { search } from '~/services/api.server'
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const { q: query } = zx.parseQuery(request, { q: z.string().optional() })
-  if (!query) {
-    return json<{ query: string; result: Awaited<ReturnType<typeof vectorSearchQdrant>>[number][] }>({
+  const { q } = zx.parseQuery(request, { q: z.string().optional() })
+  if (!q) {
+    return json<{ query: string; result: Awaited<ReturnType<typeof search>> }>({
       query: '',
       result: [],
     })
   }
 
-  const result = await vectorSearchQdrant(query, 10)
-  return json({ query, result })
+  const result = await search(q)
+  return json({ query: q, result })
 }
 
 export default function SearchPage() {
@@ -58,11 +58,11 @@ export default function SearchPage() {
               </TableHeader>
               <TableBody>
                 {result.map((r) => (
-                  <TableRow key={r.id}>
+                  <TableRow key={r.document.id}>
                     <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
-                    <TableCell>{r.section.volumeTitle}</TableCell>
-                    <TableCell>{r.section.chapterTitle}</TableCell>
-                    <TableCell className="max-w-sm truncate">{nl2br(r.section.content)}</TableCell>
+                    <TableCell>{r.document.volumeTitle}</TableCell>
+                    <TableCell>{r.document.chapterTitle}</TableCell>
+                    <TableCell className="max-w-sm truncate">{nl2br(r.document.content)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

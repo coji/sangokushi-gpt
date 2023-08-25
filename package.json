@@ -3,7 +3,9 @@
   "sideEffects": false,
   "scripts": {
     "build": "remix build",
-    "dev": "remix dev",
+    "dev": "run-p dev:*",
+    "dev:remix": "remix dev",
+    "dev:api": "cd api && rye run start",
     "start": "remix-serve build",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc",

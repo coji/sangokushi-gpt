@@ -11,7 +11,7 @@ node_modules
 /api/index.js.map
 
 qdrant-storage
-embedding-api-cache
+api-cache
 
 data/sangokushi
 data/sangokushi_cleaned

@@ -8,23 +8,23 @@ import { AppLayout } from '~/components/AppLayout'
 import { Button, HStack, Input, Stack } from '~/components/ui'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
-import { vectorSearchQdrant } from '~/features/sangokushi/services/vector-search.server'
+import { search } from '~/services/api.server'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { input } = zx.parseQuery(request, { input: z.string().optional() })
   if (!input) {
-    return json<{ input: string; vectorResult: Awaited<ReturnType<typeof vectorSearchQdrant>>[number][] }>({
+    return json<{ input: string; result: Awaited<ReturnType<typeof search>> }>({
       input: '',
-      vectorResult: [],
+      result: [],
     })
   }
 
-  const vectorResult = await vectorSearchQdrant(input, 1)
-  return json({ input, vectorResult })
+  const result = await search(input)
+  return json({ input, result })
 }
 
 export default function Index() {
-  const { vectorResult, input } = useLoaderData<typeof loader>()
+  const { result, input } = useLoaderData<typeof loader>()
   const generator = useGenerator()
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,11 +55,11 @@ export default function Index() {
 
         <div className="flex justify-end">
           <HStack>
-            {vectorResult.slice(0, 1).map((result) => {
+            {result.slice(0, 1).map((doc) => {
               return (
-                <SectionReference key={result.id} section={result.section}>
+                <SectionReference key={doc.document.id} section={doc.document}>
                   <div className="text-xs font-bold">
-                    {Math.round(result.score * 1000) / 10}
+                    {Math.round(doc.score * 1000) / 10}
                     <small>%</small> Match
                   </div>
                 </SectionReference>
@@ -68,7 +68,7 @@ export default function Index() {
           </HStack>
         </div>
 
-        <>{generator.isError ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}</>
+        {generator.error ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}
       </Stack>
     </AppLayout>
   )
