@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
+from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from hyperdb import HyperDB
 
@@ -17,11 +18,13 @@ db.load("sangokushi.db")
 
 app = FastAPI()
 
+class EmbeddingParams(BaseModel):
+    sentence: str
 
 @app.post("/embedding")
-def create_embedding(sentence: str):
+def create_embedding(params: EmbeddingParams):
     """文章を受け取り、ベクトル化した結果を返すAPI"""
-    return {"embedding": model.encode(sentence).tolist()}
+    return {"embedding": model.encode(params.sentence).tolist()}
 
 
 @app.get("/doc")
