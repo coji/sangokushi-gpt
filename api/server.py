@@ -3,7 +3,9 @@ from fastapi.responses import JSONResponse
 from sentence_transformers import SentenceTransformer
 from hyperdb import HyperDB
 
-model = SentenceTransformer("./model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu")
+model = SentenceTransformer(
+    "./model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu"
+)
 
 
 def create_embedding(document):
@@ -16,7 +18,7 @@ db.load("sangokushi.db")
 app = FastAPI()
 
 
-@app.get("/embedding")
+@app.post("/embedding")
 def create_embedding(sentence: str):
     """文章を受け取り、ベクトル化した結果を返すAPI"""
     return {"embedding": model.encode(sentence).tolist()}

@@ -6,6 +6,9 @@ export const search = async (query: string, top_k = 10) => {
 }
 
 export const fetchEmbedding = async (text: string) => {
-  const ret = await fetch(`${process.env.API_BASE_URL}/embedding?sentence=${encodeURIComponent(text)}`)
+  const ret = await fetch(`${process.env.API_BASE_URL}/embedding`, {
+    method: 'POST',
+    body: JSON.stringify({ sentence: text }),
+  })
   return (await ret.json()) as { embedding: number[] }
 }
