@@ -10,14 +10,13 @@ datasource db {
 }
 
 model Section {
-  id              String   @id @default(uuid())
-  volume_title    String
-  chapter_number  Int
-  chapter_title   String
-  section_number  String
-  startLineNumber Int
-  content         String
-  vector          String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  id             Int      @id
+  volume_title   String
+  chapter_number Int
+  chapter_title  String
+  section_number String
+  content        String
+  vector         String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

@@ -2,47 +2,45 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from ..services.database import db
+from ..services.prisma import prisma
 
 router = APIRouter()
 
 
 class Doc(BaseModel):
-    id: str
-    volumeTitle: str
-    chapterTitle: str
-    sectionNumber: str
-    startLineNumber: int
+    id: int
+    volume_title: str
+    chapter_title: str
+    section_number: str
     content: str
-    cluster: int
 
 
 class DocListItem(BaseModel):
-    id: str
-    volumeTitle: str
-    chapterTitle: str
-    sectionNumber: str
-    cluster: int
+    id: int
+    volume_title: str
+    chapter_title: str
+    section_number: str
 
 
 @router.get("/doc", response_model=list[DocListItem])
-def documents():
+async def documents():
     """ドキュメントの一覧"""
+    items = await prisma.section.find_many()
     return [
         {
-            "id": item["id"],
-            "volumeTitle": item["volumeTitle"],
-            "chapterTitle": item["chapterTitle"],
-            "sectionNumber": item["sectionNumber"],
-            "cluster": item["cluster"],
+            "id": item.id,
+            "volume_title": item.volume_title,
+            "chapter_title": item.chapter_title,
+            "section_number": item.section_number,
         }
-        for item in db.documents
+        for item in items
     ]
 
 
 @router.get("/doc/{id}", response_model=Doc)
-def document(id: str):
+async def document(id: int):
     """ドキュメントを1つ返す"""
-    doc = next((item for item in db.documents if item["id"] == id), None)
-    if doc is None:
+    item = await prisma.section.find_first(where={"id": id})
+    if item is None:
         return JSONResponse(content={"notFound": id}, status_code=404)
-    return doc
+    return item

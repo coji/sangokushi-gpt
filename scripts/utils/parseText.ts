@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 type ParsedSection = {
   volumeTitle: string
   chapterNumber: number
@@ -32,13 +31,6 @@ export function parseText(text: string): ParsedSection[] {
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim()
-
-    // console.log({
-    //   state,
-    //   chapterTitle,
-    //   sectionNumber,
-    //   line,
-    // })
 
     switch (state) {
       case ParserState.VolumeTitle:
