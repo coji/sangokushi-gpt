@@ -12,7 +12,7 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
     <React.Fragment key={section.id}>
       {children}
 
-      <p className="text-slate-700">吉川英治 「三国志」 {section.volumeTitle}</p>
+      <p className="text-slate-700">吉川英治 「三国志」 {section.volume_title}</p>
 
       <Popover>
         <PopoverTrigger asChild>
@@ -22,9 +22,9 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
         </PopoverTrigger>
         <PopoverContent>
           <HStack className="font-bold">
-            <p>{section.chapterNumber}</p>
-            <p>{section.chapterTitle}</p>
-            <p>{section.sectionNumber}</p>
+            <p>{section.chapter_number}</p>
+            <p>{section.chapter_title}</p>
+            <p>{section.section_number}</p>
           </HStack>
           <div className="h-[20rem] overflow-auto text-sm">{nl2br(section.content)}</div>
         </PopoverContent>

@@ -2,10 +2,9 @@ export interface Section {
   id: string
   file: string
   tokens: number
-  volumeTitle: string
-  chapterNumber: number
-  chapterTitle: string
-  sectionNumber: string
-  startLineNumber: number
+  volume_title: string
+  chapter_number: number
+  chapter_title: string
+  section_number: string
   content: string
 }

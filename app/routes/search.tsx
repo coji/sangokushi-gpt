@@ -63,8 +63,8 @@ export default function SearchPage() {
                 {result.map((r) => (
                   <TableRow key={r.document.id}>
                     <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
-                    <TableCell className="max-w-[4rem] truncate">{r.document.volumeTitle}</TableCell>
-                    <TableCell className="max-w-[6rem] truncate">{r.document.chapterTitle}</TableCell>
+                    <TableCell className="max-w-[4rem] truncate">{r.document.volume_title}</TableCell>
+                    <TableCell className="max-w-[6rem] truncate">{r.document.chapter_title}</TableCell>
                     <TableCell className="max-w-sm truncate">{nl2br(r.document.content)}</TableCell>
                   </TableRow>
                 ))}

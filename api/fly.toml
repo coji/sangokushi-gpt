@@ -7,7 +7,7 @@ processes = []
 
 [mounts]
   source = "cache"
-  destination = "/root/.cache"
+  destination = "/app/data"
 
 [experimental]
   auto_rollback = true

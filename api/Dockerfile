@@ -1,5 +1,4 @@
-ARG PYTHON_BASE_IMAGE='python'
-FROM ${PYTHON_BASE_IMAGE}:3.11-slim AS rye
+FROM python:3.11-slim AS rye
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
@@ -25,9 +24,12 @@ FROM rye AS run
 # App server port
 ENV PORT="8080"
 ENV HOST="0.0.0.0"
+ENV DATABASE_URL="file:/app/data/sangokushi.db?connection_limit=1"
 
 COPY --from=data /app/model ./model
 COPY server.py sangokushi.db ./
 COPY src src
+COPY prisma prisma
+RUN rye run prisma generate
 
 ENTRYPOINT ["sh", "-c", "/app/.venv/bin/uvicorn server:app --host $HOST --port $PORT"]
