@@ -30,21 +30,27 @@ if (!fs.existsSync(outputDir)) {
 }
 
 const chapters: Omit<Section, 'vector' | 'usage'>[] = []
+let id = 1
 // 各ファイルに処理を適用
 for (const file of files) {
   const inputFilePath = path.join(inputDir, file)
 
   const data = fs.readFileSync(inputFilePath, 'utf-8')
   const fileChapters = parseText(data)
-  fileChapters.forEach((chapter, index) => {
-    if (chapter.content.length < 100) return
+
+  for (const chapter of fileChapters) {
+    if (chapter.content.length < 100) continue
+    if (chapter.chapterTitle.startsWith('底本：「三国志')) {
+      continue
+    }
     chapters.push({
-      id: String(index),
+      id: String(id),
       file: path.parse(file).name,
       tokens: encoder.encode(chapter.content).length,
       ...chapter,
     })
-  })
+    id++
+  }
 }
 
 const outputFilePath = path.join(outputDir, 'sangokushi.json')
