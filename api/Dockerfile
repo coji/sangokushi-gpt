@@ -28,5 +28,6 @@ ENV HOST="0.0.0.0"
 
 COPY --from=data /app/model ./model
 COPY server.py sangokushi.db ./
+COPY src src
 
 ENTRYPOINT ["sh", "-c", "/app/.venv/bin/uvicorn server:app --host $HOST --port $PORT"]
