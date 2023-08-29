@@ -1,8 +1,7 @@
 import json
 from hyperdb import HyperDB
 import umap
-import hdbscan
-import time
+from sklearn.cluster import HDBSCAN
 from ..services.embedding import create_embedding
 
 
@@ -22,8 +21,9 @@ def clustering(db: HyperDB):
     vectors_2d = umap_model.fit_transform(db.vectors)
 
     # HDBSCANでクラスタリング
-    clusterer = hdbscan.HDBSCAN()
-    cluster_labels = clusterer.fit_predict(vectors_2d)
+    clusterer = HDBSCAN(min_cluster_size=5)
+    clusterer.fit(vectors_2d)
+    cluster_labels = clusterer.labels_
 
     # DBにクラスタ情報を保存
     for idx, label in enumerate(cluster_labels):
