@@ -1,37 +1,43 @@
 import json
 from hyperdb import HyperDB
-from sentence_transformers import SentenceTransformer
-from .clustering import clustering
+import umap
+import hdbscan
+from ..services.embedding import create_embedding
 
-model = SentenceTransformer("pkshatech/simcse-ja-bert-base-clcmlp", device="cpu")
 
-
-def create_embedding(document):
+def create_document_embedding(document):
     embeddings = []
     for i, docs in enumerate(document):
         print("embedding", i)
-        embeddings.append(model.encode(docs["content"]))
+        embeddings.append(create_embedding(docs["content"]))
     return embeddings
 
 
-def load_documents_from_json():
-    documents = []
-    with open("../data/sangokushi_structured/sangokushi.json", "r") as f:
-        data = json.load(f)
-    for paragraph in data:
-        documents.append(paragraph)
-    return documents
-
-
-def create_db():
-    documents = load_documents_from_json()
-    db = HyperDB(documents, embedding_function=create_embedding)
+def create_db(documents: list):
+    db = HyperDB(documents, embedding_function=create_document_embedding)
     return db
 
 
+def clustering(db: HyperDB):
+    # UMAPで2次元に削減
+    umap_model = umap.UMAP(n_components=2)
+    vectors_2d = umap_model.fit_transform(db.vectors)
+
+    # HDBSCANでクラスタリング
+    clusterer = hdbscan.HDBSCAN()
+    cluster_labels = clusterer.fit_predict(vectors_2d)
+
+    # DBにクラスタ情報を保存
+    for idx, label in enumerate(cluster_labels):
+        db.documents[idx]["cluster"] = int(label)
+
+
 def build_db(db_filename: str):
-    db_filename = "sangokushi.db"
-    db = create_db()
+    with open("../data/sangokushi_structured/sangokushi.json", "r") as f:
+        data = json.load(f)
+    db = create_db([item for item in data])
+
     clustering(db)
+
     db.save(db_filename)
     print("db saved to", db_filename)
