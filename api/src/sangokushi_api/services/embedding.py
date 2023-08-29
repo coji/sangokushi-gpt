@@ -5,5 +5,5 @@ model = SentenceTransformer(
 )
 
 
-def create_embedding(sentence: str):
-    return model.encode(sentence)
+def create_embedding(sentence: str | list[str], show_progress_bar: bool = False):
+    return model.encode(sentence, show_progress_bar=show_progress_bar)

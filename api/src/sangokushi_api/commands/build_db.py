@@ -2,20 +2,18 @@ import json
 from hyperdb import HyperDB
 import umap
 import hdbscan
+import time
 from ..services.embedding import create_embedding
 
 
-def create_document_embedding(document):
-    embeddings = []
-    for i, docs in enumerate(document):
-        print("embedding", i)
-        embeddings.append(create_embedding(docs["content"]))
-    return embeddings
+def create_document_embedding(documents):
+    return create_embedding(
+        [item["content"] for item in documents], show_progress_bar=True
+    )
 
 
 def create_db(documents: list):
-    db = HyperDB(documents, embedding_function=create_document_embedding)
-    return db
+    return HyperDB(documents, embedding_function=create_document_embedding)
 
 
 def clustering(db: HyperDB):
@@ -35,8 +33,11 @@ def clustering(db: HyperDB):
 def build_db(db_filename: str):
     with open("../data/sangokushi_structured/sangokushi.json", "r") as f:
         data = json.load(f)
+
+    print("embedding...")
     db = create_db([item for item in data])
 
+    print("clustering...")
     clustering(db)
 
     db.save(db_filename)
