@@ -1,7 +1,7 @@
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer(
-    "./model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu"
+    "./data/model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu"
 )
 
 

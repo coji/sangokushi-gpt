@@ -2,4 +2,4 @@ model
 .venv
 __pycache__
 
-prisma/data
+data
