@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sentence_transformers import SentenceTransformer
 from hyperdb import HyperDB
+import json
 
 model = SentenceTransformer(
     "./model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu"
@@ -18,8 +19,10 @@ db.load("sangokushi.db")
 
 app = FastAPI()
 
+
 class EmbeddingParams(BaseModel):
     sentence: str
+
 
 @app.post("/embedding")
 def create_embedding(params: EmbeddingParams):
@@ -30,7 +33,17 @@ def create_embedding(params: EmbeddingParams):
 @app.get("/doc")
 def root():
     """ドキュメントの一覧"""
-    return {"documents": [item["id"] for item in db.documents]}
+    return {
+        "documents": [
+            {
+                "id": item["id"],
+                "volumeTitle": item["volumeTitle"],
+                "chapterTitle": item["chapterTitle"],
+                "sectionNumber": item["sectionNumber"],
+            }
+            for item in db.documents
+        ]
+    }
 
 
 @app.get("/doc/{id}")
