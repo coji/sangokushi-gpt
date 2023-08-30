@@ -1,8 +1,6 @@
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer(
-    "./model/pkshatech_simcse-ja-bert-base-clcmlp", device="cpu"
-)
+model = SentenceTransformer("./model/pkshatech_GLuCoSE-base-ja")
 
 
 def create_embedding(sentence: str | list[str], show_progress_bar: bool = False):
