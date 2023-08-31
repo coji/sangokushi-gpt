@@ -1,6 +1,6 @@
 import { type ActionArgs } from '@remix-run/node'
 import invariant from 'tiny-invariant'
-import { search } from '~/services/api.server'
+import { fetchMostSimilarDoc } from '~/services/api.server'
 import { OpenAIChatStream } from '~/services/openai-chat-stream.server'
 
 export const action = async ({ request }: ActionArgs) => {
@@ -9,7 +9,7 @@ export const action = async ({ request }: ActionArgs) => {
     const input = formData.get('input')?.toString()
     invariant(input, 'Missing input')
 
-    const result = await search(input, 1)
+    const doc = await fetchMostSimilarDoc(input)
 
     const systemPrompt = `
 You are a professional novelist.
@@ -29,7 +29,7 @@ Create a short story that meets the user's request.
  - Use the following context as much as possible:
 
 Context:
-${result[0].document.content}
+${doc.content}
 
 - All output must be in Japanese.
 

@@ -23,15 +23,9 @@ def search(q: str, top_k: int = 10):
     return {
         "result": [
             {
-                "document": {
-                    "id": item[0]["id"],
-                    "volume_title": item[0]["volumeTitle"],
-                    "chapter_title": item[0]["chapterTitle"],
-                    "section_number": item[0]["sectionNumber"],
-                    "content": item[0]["content"],
-                },
-                "score": float(item[1]),
+                "document": {**item},
+                "score": float(score),
             }
-            for item in result
+            for item, score in result
         ]
     }

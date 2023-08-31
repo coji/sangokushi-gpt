@@ -1,8 +1,23 @@
+import re
 import json
 from hyperdb import HyperDB
 import umap
 from sklearn.cluster import HDBSCAN
 from ..services.embedding import create_embedding
+from ..services.prisma import prisma
+from prisma import Prisma
+
+
+def chunk_sentences(text, chunk_size=10, overlap=2):
+    sentences = re.split("。|\n", text)
+    sentences = [s for s in sentences if s]  # 空の文字列を削除
+    chunks = []
+
+    for i in range(0, len(sentences), chunk_size - overlap):
+        chunk = sentences[i : i + chunk_size]
+        chunks.append("。".join(chunk))
+
+    return chunks
 
 
 def create_document_embedding(documents):
@@ -11,8 +26,22 @@ def create_document_embedding(documents):
     )
 
 
-def create_db(documents: list):
-    return HyperDB(documents, embedding_function=create_document_embedding)
+def create_db(sections: list):
+    chunked_sections = []
+    for section in sections:
+        chunks = chunk_sentences(section.content)
+        for chunk in chunks:
+            chunked_sections.append(
+                {
+                    "id": section.id,
+                    "volume_title": section.volume_title,
+                    "chapter_title": section.chapter_title,
+                    "section_number": section.section_number,
+                    "content": chunk,
+                }
+            )
+
+    return HyperDB(chunked_sections, embedding_function=create_document_embedding)
 
 
 def clustering(db: HyperDB):
@@ -30,12 +59,13 @@ def clustering(db: HyperDB):
         db.documents[idx]["cluster"] = int(label)
 
 
-def build_db(db_filename: str):
-    with open("../data/sangokushi_structured/sangokushi.json", "r") as f:
-        data = json.load(f)
+async def build_db(db_filename: str):
+    await prisma.connect()
+    data = await prisma.section.find_many()
+    await prisma.disconnect()
 
     print("embedding...")
-    db = create_db([item for item in data])
+    db = create_db(data)
 
     print("clustering...")
     clustering(db)

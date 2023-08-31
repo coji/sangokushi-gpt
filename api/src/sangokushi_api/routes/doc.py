@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from ..services.database import db
 from ..services.prisma import prisma
 
 router = APIRouter()

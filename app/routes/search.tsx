@@ -29,6 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   }
 
   const result = await search(q)
+  console.log(result)
   return json({ query: q, result })
 }
 

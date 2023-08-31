@@ -8,23 +8,29 @@ import { AppLayout } from '~/components/AppLayout'
 import { Button, HStack, Input, Stack } from '~/components/ui'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
-import { search } from '~/services/api.server'
+import { fetchMostSimilarDoc, search } from '~/services/api.server'
 
 export const loader = async ({ request }: LoaderArgs) => {
   const { input } = zx.parseQuery(request, { input: z.string().optional() })
   if (!input) {
-    return json<{ input: string; result: Awaited<ReturnType<typeof search>> }>({
+    return json<{
+      input: string
+      result: Awaited<ReturnType<typeof search>>
+      doc: Awaited<ReturnType<typeof fetchMostSimilarDoc>> | null
+    }>({
       input: '',
       result: [],
+      doc: null,
     })
   }
 
   const result = await search(input)
-  return json({ input, result })
+  const doc = await fetchMostSimilarDoc(input)
+  return json({ input, result, doc })
 }
 
 export default function Index() {
-  const { result, input } = useLoaderData<typeof loader>()
+  const { result, input, doc } = useLoaderData<typeof loader>()
   const generator = useGenerator()
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -55,16 +61,17 @@ export default function Index() {
 
         <div className="flex justify-end">
           <HStack>
-            {result.slice(0, 1).map((doc) => {
-              return (
-                <SectionReference key={doc.document.id} section={doc.document}>
-                  <div className="text-xs font-bold">
-                    {Math.round(doc.score * 1000) / 10}
-                    <small>%</small> Match
-                  </div>
-                </SectionReference>
-              )
-            })}
+            {doc &&
+              result.slice(0, 1).map((ret) => {
+                return (
+                  <SectionReference key={doc.id} section={doc}>
+                    <div className="text-xs font-bold">
+                      {Math.round(ret.score * 1000) / 10}
+                      <small>%</small> Match
+                    </div>
+                  </SectionReference>
+                )
+              })}
           </HStack>
         </div>
 

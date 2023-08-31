@@ -13,3 +13,13 @@ export const fetchEmbedding = async (text: string) => {
   })
   return (await ret.json()) as { embedding: number[] }
 }
+
+export const fetchDoc = async (id: string) => {
+  const ret = await fetch(`${process.env.API_BASE_URL}/doc/${id}`)
+  return (await ret.json()) as Section
+}
+
+export const fetchMostSimilarDoc = async (query: string) => {
+  const ret = await search(query, 1)
+  return fetchDoc(ret[0].document.id)
+}
