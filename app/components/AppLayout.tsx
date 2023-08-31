@@ -37,7 +37,7 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </header>
 
-      <main className="container relative py-4">{children}</main>
+      <main className="relative px-2 py-4 md:container">{children}</main>
 
       <footer className="bg-background py-2 text-center">
         <div className="container">
