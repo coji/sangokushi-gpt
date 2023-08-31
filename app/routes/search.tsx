@@ -61,12 +61,12 @@ export default function SearchPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {result.map((r) => (
-                  <TableRow key={r.document.id}>
+                {result.map((r, i) => (
+                  <TableRow key={`r.document.id-${i}`}>
                     <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
-                    <TableCell className="max-w-[4rem] truncate">{r.document.volume_title}</TableCell>
-                    <TableCell className="max-w-[6rem] truncate">{r.document.chapter_title}</TableCell>
-                    <TableCell className="max-w-sm truncate">{nl2br(r.document.content)}</TableCell>
+                    <TableCell>{r.document.volume_title}</TableCell>
+                    <TableCell>{r.document.chapter_title}</TableCell>
+                    <TableCell>{nl2br(r.document.content)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
