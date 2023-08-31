@@ -24,8 +24,8 @@ export const loader = async ({ request }: LoaderArgs) => {
     })
   }
 
-  const result = await search(input)
-  const doc = await fetchMostSimilarDoc(input)
+  const [result, doc] = await Promise.all([search(input), fetchMostSimilarDoc(input)])
+
   return json({ input, result, doc })
 }
 
