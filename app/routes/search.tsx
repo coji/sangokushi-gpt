@@ -42,7 +42,7 @@ export default function SearchPage() {
       <Stack className="h-full">
         <Form>
           <HStack>
-            <Input autoFocus name="q" defaultValue={query} />
+            <Input autoFocus name="q" placeholder="酒を飲む張飛" defaultValue={query} />
             <Button isLoading={navigation.state !== 'idle'} disabled={navigation.state !== 'idle'}>
               Search
             </Button>
