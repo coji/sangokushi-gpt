@@ -34,8 +34,6 @@ ${doc.content}
 - All output must be in Japanese.
 
 `
-    //    console.log({ systemPrompt, input })
-
     const stream = await OpenAIChatStream(
       {
         messages: [

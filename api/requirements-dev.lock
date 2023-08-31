@@ -19,6 +19,7 @@ charset-normalizer==3.2.0
 click==8.1.7
 fastapi==0.103.0
 filelock==3.12.3
+flake8==6.1.0
 frozenlist==1.4.0
 fsspec==2023.6.0
 fugashi==1.3.0
@@ -33,8 +34,10 @@ jinja2==3.1.2
 joblib==1.3.2
 llvmlite==0.40.1
 markupsafe==2.1.3
+mccabe==0.7.0
 mpmath==1.3.0
 multidict==6.0.4
+mypy==1.5.1
 mypy-extensions==1.0.0
 networkx==3.1
 nltk==3.8.1
@@ -47,8 +50,10 @@ pathspec==0.11.2
 pillow==10.0.0
 platformdirs==3.10.0
 prisma==0.10.0
+pycodestyle==2.11.0
 pydantic==2.3.0
 pydantic-core==2.6.3
+pyflakes==3.1.0
 pynndescent==0.5.10
 python-dotenv==1.0.0
 pyyaml==6.0.1

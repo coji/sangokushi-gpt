@@ -1,10 +1,10 @@
 import React from 'react'
 import nl2br from 'react-nl2br'
 import { Button, HStack, Popover, PopoverContent, PopoverTrigger } from '~/components/ui'
-import type { Section } from '~/types/model'
+import type { Doc } from '~/services/api-client'
 
 interface SectionReferenceProps {
-  section: Partial<Section>
+  section: Partial<Doc>
   children: React.ReactNode
 }
 export const SectionReference = ({ section, children }: SectionReferenceProps) => {
@@ -22,7 +22,7 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
         </PopoverTrigger>
         <PopoverContent>
           <HStack className="font-bold">
-            <p>{section.chapter_number}</p>
+            <p>{section.volume_title}</p>
             <p>{section.chapter_title}</p>
             <p>{section.section_number}</p>
           </HStack>

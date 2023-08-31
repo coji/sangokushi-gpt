@@ -1,25 +1,22 @@
-import type { Section } from '../types/model'
+import { DefaultService, OpenAPI } from './api-client'
+
+OpenAPI.BASE = process.env.API_BASE_URL || 'http://localhost:8000'
 
 export const search = async (query: string, top_k = 10) => {
-  const ret = await fetch(`${process.env.API_BASE_URL}/search?q=${encodeURIComponent(query)}&top_k=${top_k}`)
-  return (await ret.json())['result'] as { document: Section; score: number }[]
+  const { result } = await DefaultService.searchSearchGet(query, top_k)
+  return result
 }
 
 export const fetchEmbedding = async (text: string) => {
-  const ret = await fetch(`${process.env.API_BASE_URL}/embedding`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ sentence: text }),
-  })
-  return (await ret.json()) as { embedding: number[] }
+  const { embedding } = await DefaultService.embeddingEmbeddingPost({ sentence: text })
+  return embedding
 }
 
-export const fetchDoc = async (id: string) => {
-  const ret = await fetch(`${process.env.API_BASE_URL}/doc/${id}`)
-  return (await ret.json()) as Section
+export const fetchDoc = async (id: number) => {
+  return await DefaultService.documentDocIdGet(id)
 }
 
 export const fetchMostSimilarDoc = async (query: string) => {
-  const ret = await search(query, 1)
-  return fetchDoc(ret[0].document.id)
+  const result = await search(query, 1)
+  return fetchDoc(result[0].document.id)
 }

@@ -1,0 +1,389 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/embedding": {
+      "post": {
+        "summary": "Embedding",
+        "description": "\u6587\u7ae0\u3092\u53d7\u3051\u53d6\u308a\u3001\u30d9\u30af\u30c8\u30eb\u5316\u3057\u305f\u7d50\u679c\u3092\u8fd4\u3059API",
+        "operationId": "embedding_embedding_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbeddingParams"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbeddingResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doc": {
+      "get": {
+        "summary": "Documents",
+        "description": "\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8\u306e\u4e00\u89a7",
+        "operationId": "documents_doc_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DocListItem"
+                  },
+                  "type": "array",
+                  "title": "Response Documents Doc Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/doc/{id}": {
+      "get": {
+        "summary": "Document",
+        "description": "\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8\u30921\u3064\u8fd4\u3059",
+        "operationId": "document_doc__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Doc"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cluster": {
+      "get": {
+        "summary": "Cluster",
+        "description": "\u30af\u30e9\u30b9\u30bf\u30fc\u306e\u4e00\u89a7",
+        "operationId": "cluster_cluster_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cluster/{cluster}": {
+      "get": {
+        "summary": "Cluster",
+        "description": "\u30af\u30e9\u30b9\u30bf\u306b\u5c5e\u3059\u308b\u30c9\u30ad\u30e5\u30e1\u30f3\u30c8\u3092\u8fd4\u3059",
+        "operationId": "cluster_cluster__cluster__get",
+        "parameters": [
+          {
+            "name": "cluster",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Cluster"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "summary": "Search",
+        "description": "\u6587\u7ae0\u3092\u53d7\u3051\u53d6\u308a\u3001\u985e\u4f3c\u5ea6\u306e\u9ad8\u3044\u6587\u7ae0\u3092\u8fd4\u3059",
+        "operationId": "search_search_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Q"
+            }
+          },
+          {
+            "name": "top_k",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10,
+              "title": "Top K"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SearchResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Doc": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "volume_title": {
+            "type": "string",
+            "title": "Volume Title"
+          },
+          "chapter_title": {
+            "type": "string",
+            "title": "Chapter Title"
+          },
+          "section_number": {
+            "type": "string",
+            "title": "Section Number"
+          },
+          "content": {
+            "type": "string",
+            "title": "Content"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "volume_title",
+          "chapter_title",
+          "section_number",
+          "content"
+        ],
+        "title": "Doc"
+      },
+      "DocListItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "volume_title": {
+            "type": "string",
+            "title": "Volume Title"
+          },
+          "chapter_title": {
+            "type": "string",
+            "title": "Chapter Title"
+          },
+          "section_number": {
+            "type": "string",
+            "title": "Section Number"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "volume_title",
+          "chapter_title",
+          "section_number"
+        ],
+        "title": "DocListItem"
+      },
+      "EmbeddingParams": {
+        "properties": {
+          "sentence": {
+            "type": "string",
+            "title": "Sentence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sentence"
+        ],
+        "title": "EmbeddingParams"
+      },
+      "EmbeddingResponse": {
+        "properties": {
+          "embedding": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Embedding"
+          }
+        },
+        "type": "object",
+        "required": [
+          "embedding"
+        ],
+        "title": "EmbeddingResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ScoredDoc": {
+        "properties": {
+          "document": {
+            "$ref": "#/components/schemas/Doc"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "document",
+          "score"
+        ],
+        "title": "ScoredDoc"
+      },
+      "SearchResponse": {
+        "properties": {
+          "result": {
+            "items": {
+              "$ref": "#/components/schemas/ScoredDoc"
+            },
+            "type": "array",
+            "title": "Result"
+          }
+        },
+        "type": "object",
+        "required": [
+          "result"
+        ],
+        "title": "SearchResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
