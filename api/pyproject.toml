@@ -45,7 +45,7 @@ type = "index"
 
 [tool.rye.scripts]
 start = { cmd = 'uvicorn server:app --reload --host 0.0.0.0 --port 8000', env = { ENV = 'development' } }
-"build:db" = { cmd = 'python build_db.py'}
+"build:db" = { cmd = 'python -m src.sangokushi_api.commands.build_db'}
 
 [tool.hatch.metadata]
 allow-direct-references = true

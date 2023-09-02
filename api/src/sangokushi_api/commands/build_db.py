@@ -1,3 +1,4 @@
+import asyncio
 import re
 
 import umap
@@ -74,3 +75,7 @@ async def build_db(db_filename: str):
 
     db.save(db_filename)
     print("db saved to", db_filename)
+
+
+if __name__ == "__main__":
+    asyncio.run(build_db("sangokushi.db"))
