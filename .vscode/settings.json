@@ -1,0 +1,43 @@
+{
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "**/Thumbs.db": true,
+    "**/node_modules": true
+  },
+
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  },
+
+  "python.defaultInterpreterPath": "${workspaceRoot}/api/.venv/bin/python",
+  // "python.analysis.extraPaths": ["${workspaceRoot}/api/.venv/site-packages?"],
+  "python.envFile": "${workspaceRoot}/api/.env",
+
+  // black
+  "editor.formatOnSave": true,
+  "python.formatting.provider": "none",
+  "black-formatter.args": ["--config", "${workspaceFolder}/api/pyproject.toml"],
+
+  // flake8
+  "python.linting.lintOnSave": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.flake8Enabled": false,
+  // pyproject-flake8 pflake8を指定
+  "flake8.args": ["--config=${workspaceFolder}/api/pyproject.toml"],
+  "flake8.path": ["${workspaceFolder}/api/.venv/bin/pflake8"],
+
+  // mypy
+  "python.linting.mypyEnabled": false,
+  "mypy-type-checker.args": ["--config-file=${workspaceFolder}/api/pyproject.toml"],
+
+  // isort
+  "isort.path": ["${workspaceFolder}/api/.venv/bin/isort"]
+}
