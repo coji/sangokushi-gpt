@@ -3,7 +3,7 @@
   "sideEffects": false,
   "scripts": {
     "generate": "run-s generate:openapi generate:client",
-    "generate:openapi": "cd api && python generate-openapi-json.py",
+    "generate:openapi": "cd api && python src/sangokushi_api/commands/generate-openapi-json.py",
     "generate:client": "pnpm openapi -i api/openapi.json -o app/services/api-client --indent 2",
     "build": "remix build",
     "dev": "run-p dev:*",
