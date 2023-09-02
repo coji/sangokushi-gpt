@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+
 from ..services.prisma import prisma
 
 router = APIRouter()
@@ -25,15 +26,7 @@ class DocListItem(BaseModel):
 async def documents():
     """ドキュメントの一覧"""
     items = await prisma.section.find_many()
-    return [
-        {
-            "id": item.id,
-            "volume_title": item.volume_title,
-            "chapter_title": item.chapter_title,
-            "section_number": item.section_number,
-        }
-        for item in items
-    ]
+    return [item for item in items]
 
 
 @router.get("/doc/{id}", response_model=Doc)

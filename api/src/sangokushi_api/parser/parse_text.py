@@ -1,7 +1,7 @@
-from pydantic import BaseModel
-from typing import List
-from enum import Enum
 import re
+from enum import Enum
+
+from pydantic import BaseModel
 
 
 class ParsedSection(BaseModel):
@@ -25,7 +25,7 @@ def is_kanji_num(str: str) -> bool:
 
 def handle_volume_title(
     line: str, volume_title: str, state: ParserState
-) -> (str, ParserState):
+) -> tuple[str, ParserState]:
     if line not in ["三国志", "吉川英治", ""]:
         volume_title = line
     if line == "" and volume_title != "":
@@ -35,7 +35,7 @@ def handle_volume_title(
 
 def handle_chapter_title(
     line: str, chapter_number: int, state: ParserState
-) -> (int, ParserState):
+) -> tuple[int, ParserState]:
     if line != "":
         chapter_number += 1
         state = ParserState.SectionNumber
@@ -44,19 +44,20 @@ def handle_chapter_title(
 
 def handle_section_number(
     line: str, state: ParserState, section_number: str
-) -> (str, ParserState):
-    if line != "" and is_kanji_num(line):
-        section_number = re.search(r"[一二三四五六七八九]", line).group(0)
+) -> tuple[str, ParserState]:
+    m = re.search(r"[一二三四五六七八九]", line)
+    if line != "" and m is not None:
+        section_number = m.group(0)
         state = ParserState.Content
     return section_number, state
 
 
 def handle_content(
-    lines: List[str],
+    lines: list[str],
     i: int,
     start_line_number: int,
     state: ParserState,
-    parsed_sections: List[ParsedSection],
+    parsed_sections: list[ParsedSection],
     volume_title: str,
     chapter_number: int,
     chapter_title: str,
@@ -96,9 +97,9 @@ def handle_content(
     return state
 
 
-def parse_text(text: str) -> List[ParsedSection]:
+def parse_text(text: str) -> list[ParsedSection]:
     lines = text.split("\n")
-    parsed_sections = []
+    parsed_sections: list[ParsedSection] = []
     volume_title = ""
     chapter_number = 0
     chapter_title = ""
@@ -110,12 +111,18 @@ def parse_text(text: str) -> List[ParsedSection]:
         line = lines[i].strip()
 
         if state == ParserState.VolumeTitle:
-            volume_title, state = handle_volume_title(line, volume_title, state)
+            volume_title, state = handle_volume_title(
+                line, volume_title, state
+            )
         elif state == ParserState.ChapterTitle:
-            chapter_number, state = handle_chapter_title(line, chapter_number, state)
+            chapter_number, state = handle_chapter_title(
+                line, chapter_number, state
+            )
             chapter_title = line
         elif state == ParserState.SectionNumber:
-            section_number, state = handle_section_number(line, state, section_number)
+            section_number, state = handle_section_number(
+                line, state, section_number
+            )
             start_line_number = i + 1
         elif state == ParserState.Content:
             state = handle_content(

@@ -1,20 +1,23 @@
+from collections import Counter
+
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel
-from collections import Counter
+
 from ..services.database import db
 
 router = APIRouter()
 
 
 @router.get("/cluster")
-def cluster():
+def cluster_index():
     """クラスターの一覧"""
     return dict(Counter([item["cluster"] for item in db.documents]))
 
 
 @router.get("/cluster/{cluster}")
-def cluster(cluster: str):
+def get_cluster(
+    cluster: str,
+):
     """クラスタに属するドキュメントを返す"""
     docs = [item for item in db.documents if item["cluster"] == int(cluster)]
     if len(docs) == 0:

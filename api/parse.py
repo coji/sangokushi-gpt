@@ -1,12 +1,12 @@
-import glob
 import asyncio
-from fastapi.encoders import jsonable_encoder
-from src.sangokushi_api.services.prisma import prisma
+import glob
+
+from src.sangokushi_api.parser.parse_text import ParsedSection, parse_text
 from src.sangokushi_api.parser.remover import (
     remove_header_and_footer,
     remove_ruby_and_symbols,
 )
-from src.sangokushi_api.parser.parse_text import parse_text, ParsedSection
+from src.sangokushi_api.services.prisma import prisma
 
 
 # データベースにデータを挿入（仮）
@@ -30,7 +30,9 @@ async def insert_into_database(sections: list[ParsedSection]):
 
 # ファイルからデータをフィルタリング（仮）
 def parse_data(file_data):
-    filtered_text = remove_ruby_and_symbols(remove_header_and_footer(file_data))
+    filtered_text = remove_ruby_and_symbols(
+        remove_header_and_footer(file_data)
+    )
     return parse_text(filtered_text)
 
 

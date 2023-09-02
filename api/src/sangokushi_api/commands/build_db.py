@@ -1,11 +1,11 @@
 import re
-import json
-from hyperdb import HyperDB
+
 import umap
+from hyperdb import HyperDB
 from sklearn.cluster import HDBSCAN
+
 from ..services.embedding import create_embedding
 from ..services.prisma import prisma
-from prisma import Prisma
 
 
 def chunk_sentences(text, chunk_size=10, overlap=2):
@@ -41,7 +41,9 @@ def create_db(sections: list):
                 }
             )
 
-    return HyperDB(chunked_sections, embedding_function=create_document_embedding)
+    return HyperDB(
+        chunked_sections, embedding_function=create_document_embedding
+    )
 
 
 def clustering(db: HyperDB):

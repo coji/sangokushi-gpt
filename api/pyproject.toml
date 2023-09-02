@@ -19,6 +19,7 @@ dependencies = [
     "numba>=0.57.1",
     "setuptools>=68.1.2",
     "prisma>=0.10.0",
+    "isort>=5.12.0",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -31,8 +32,10 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "black>=23.7.0",
-    "mypy>=1.5.1",
+    "isort>=5.12.0",
     "flake8>=5.0.4",
+    "pyproject-flake8>=5.0.4.post1",
+    "mypy>=1.5.1",
 ]
 
 [[tool.rye.sources]]
@@ -46,3 +49,33 @@ start = { cmd = 'uvicorn server:app --reload --host 0.0.0.0 --port 8000', env = 
 
 [tool.hatch.metadata]
 allow-direct-references = true
+
+# 以下各フォーマッター・リンターの詳細設定
+[tool.black]
+# 最大文字数 指定文字数を超えたら改行
+line_length = 79
+
+[tool.flake8]
+# blackのline_lengthに合わせてください
+max-line-length = 80
+# 警告非表示一覧
+extend-ignore = ["E203", "W503"]
+
+[tool.isort]
+profile = "black"
+
+[tool.mypy]
+# エラー時のメッセージを詳細表示
+show_error_context = true
+# エラー発生箇所の行数/列数を表示
+show_column_numbers = true
+# サードパーティ製モジュールの型チェックを無視
+ignore_missing_imports = true
+# 関数の引数/戻り値に型指定必須
+disallow_untyped_defs = false
+# デフォルト引数にNoneを取る場合、型アノテーションにOptional必須
+no_implicit_optional = true
+# 戻り値がAny型ではない関数の戻り値がAny型のとき警告
+warn_return_any = true
+# 冗長なキャストに警告
+warn_redundant_casts = true

@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from src.sangokushi_api.routes import embedding, doc, cluster, search
+from src.sangokushi_api.routes import cluster, doc, embedding, search
 from src.sangokushi_api.services.prisma import prisma
 
 app = FastAPI()
