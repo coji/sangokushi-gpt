@@ -1,5 +1,5 @@
 [project]
-name = "api"
+name = "sangokushi_api"
 version = "3.10.11"
 description = "Add your description here"
 authors = [
@@ -20,6 +20,7 @@ dependencies = [
     "setuptools>=68.1.2",
     "prisma>=0.10.0",
     "isort>=5.12.0",
+    "pandas>=2.0.3",
 ]
 readme = "README.md"
 requires-python = ">= 3.8"
@@ -46,6 +47,7 @@ type = "index"
 [tool.rye.scripts]
 start = { cmd = 'uvicorn server:app --reload --host 0.0.0.0 --port 8000', env = { ENV = 'development' } }
 "build:db" = { cmd = 'python -m src.sangokushi_api.commands.build_db'}
+finetune = { cmd = 'python -m src.sangokushi_api.commands.finetune'}
 
 [tool.hatch.metadata]
 allow-direct-references = true

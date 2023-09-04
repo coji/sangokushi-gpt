@@ -1,6 +1,7 @@
 from sentence_transformers import SentenceTransformer
 
 model = SentenceTransformer("./model/pkshatech_GLuCoSE-base-ja")
+# model = SentenceTransformer("./model/finetuned")
 
 
 def create_embedding(
