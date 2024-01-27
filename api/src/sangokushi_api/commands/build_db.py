@@ -65,7 +65,6 @@ def clustering(db: HyperDB):
 async def build_db(db_filename: str):
     await prisma.connect()
     data = await prisma.section.find_many()
-    await prisma.disconnect()
 
     print("embedding...")
     db = create_db(data)
@@ -75,6 +74,15 @@ async def build_db(db_filename: str):
 
     db.save(db_filename)
     print("db saved to", db_filename)
+
+    for doc in db.documents:
+        vector = doc["vector"]
+        # vector を DB に保存
+        await prisma.section.update(
+            where={"id": doc["id"]}, data={"vector": vector}
+        )
+
+    await prisma.disconnect()
 
 
 if __name__ == "__main__":
