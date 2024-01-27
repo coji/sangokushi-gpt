@@ -1,4 +1,4 @@
-import { json, type LoaderArgs } from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Form, useLoaderData, useNavigation } from '@remix-run/react'
 import nl2br from 'react-nl2br'
 import { z } from 'zod'
@@ -19,7 +19,7 @@ import {
 } from '~/components/ui'
 import { search } from '~/services/api.server'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { q } = zx.parseQuery(request, { q: z.string().optional() })
   if (!q) {
     return json<{ query: string; result: Awaited<ReturnType<typeof search>> }>({

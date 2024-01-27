@@ -2,18 +2,17 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Doc } from '../models/Doc';
-import type { DocListItem } from '../models/DocListItem';
-import type { EmbeddingParams } from '../models/EmbeddingParams';
-import type { EmbeddingResponse } from '../models/EmbeddingResponse';
-import type { SearchResponse } from '../models/SearchResponse';
+import type { Doc } from '../models/Doc'
+import type { DocListItem } from '../models/DocListItem'
+import type { EmbeddingParams } from '../models/EmbeddingParams'
+import type { EmbeddingResponse } from '../models/EmbeddingResponse'
+import type { SearchResponse } from '../models/SearchResponse'
 
-import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
+import type { CancelablePromise } from '../core/CancelablePromise'
+import { OpenAPI } from '../core/OpenAPI'
+import { request as __request } from '../core/request'
 
 export class DefaultService {
-
   /**
    * Embedding
    * 文章を受け取り、ベクトル化した結果を返すAPI
@@ -21,9 +20,7 @@ export class DefaultService {
    * @returns EmbeddingResponse Successful Response
    * @throws ApiError
    */
-  public static embeddingEmbeddingPost(
-    requestBody: EmbeddingParams,
-  ): CancelablePromise<EmbeddingResponse> {
+  public static embeddingEmbeddingPost(requestBody: EmbeddingParams): CancelablePromise<EmbeddingResponse> {
     return __request(OpenAPI, {
       method: 'POST',
       url: '/embedding',
@@ -32,7 +29,7 @@ export class DefaultService {
       errors: {
         422: `Validation Error`,
       },
-    });
+    })
   }
 
   /**
@@ -45,7 +42,7 @@ export class DefaultService {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/doc',
-    });
+    })
   }
 
   /**
@@ -55,19 +52,17 @@ export class DefaultService {
    * @returns Doc Successful Response
    * @throws ApiError
    */
-  public static documentDocIdGet(
-    id: number,
-  ): CancelablePromise<Doc> {
+  public static documentDocIdGet(id: number): CancelablePromise<Doc> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/doc/{id}',
       path: {
-        'id': id,
+        id: id,
       },
       errors: {
         422: `Validation Error`,
       },
-    });
+    })
   }
 
   /**
@@ -80,7 +75,7 @@ export class DefaultService {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/cluster',
-    });
+    })
   }
 
   /**
@@ -90,19 +85,17 @@ export class DefaultService {
    * @returns any Successful Response
    * @throws ApiError
    */
-  public static clusterClusterClusterGet(
-    cluster: string,
-  ): CancelablePromise<any> {
+  public static clusterClusterClusterGet(cluster: string): CancelablePromise<any> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/cluster/{cluster}',
       path: {
-        'cluster': cluster,
+        cluster: cluster,
       },
       errors: {
         422: `Validation Error`,
       },
-    });
+    })
   }
 
   /**
@@ -113,21 +106,17 @@ export class DefaultService {
    * @returns SearchResponse Successful Response
    * @throws ApiError
    */
-  public static searchSearchGet(
-    q: string,
-    topK: number = 10,
-  ): CancelablePromise<SearchResponse> {
+  public static searchSearchGet(q: string, topK: number = 10): CancelablePromise<SearchResponse> {
     return __request(OpenAPI, {
       method: 'GET',
       url: '/search',
       query: {
-        'q': q,
-        'top_k': topK,
+        q: q,
+        top_k: topK,
       },
       errors: {
         422: `Validation Error`,
       },
-    });
+    })
   }
-
 }

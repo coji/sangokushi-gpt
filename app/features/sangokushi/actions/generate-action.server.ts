@@ -1,9 +1,9 @@
-import { type ActionArgs } from '@remix-run/node'
+import { type ActionFunctionArgs } from '@remix-run/node'
 import invariant from 'tiny-invariant'
 import { fetchMostSimilarDoc } from '~/services/api.server'
 import { OpenAIChatStream } from '~/services/openai-chat-stream.server'
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   try {
     const formData = await request.formData()
     const input = formData.get('input')?.toString()

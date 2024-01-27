@@ -1,4 +1,4 @@
-import { json, type LoaderArgs } from '@remix-run/node'
+import { json, type LoaderFunctionArgs } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
 import React from 'react'
 import nl2br from 'react-nl2br'
@@ -10,7 +10,7 @@ import { SectionReference } from '~/features/sangokushi/components/SectionRefere
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
 import { fetchMostSimilarDoc, search } from '~/services/api.server'
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { input } = zx.parseQuery(request, { input: z.string().optional() })
   if (!input) {
     return json<{
