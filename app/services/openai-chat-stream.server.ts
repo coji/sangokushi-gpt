@@ -77,18 +77,16 @@ export const OpenAIChatStream = async (
         if (event.type === 'event') {
           const data = event.data
           try {
-            const { choices } = JSON.parse(data) as OpenAIChatResponseData
-            const text = choices[0].delta.content
-            if (text === undefined) {
-              // なぜか冒頭にもundefinedが入ってくるので、finish_reason で判別
-              if (choices[0].finish_reason === 'stop') {
-                // 完了
-                const finish = new Date()
-                controller.close()
-                options.onComplete?.(message, start, finish)
-              }
+            if (data === '[DONE]') {
+              // 完了
+              const finish = new Date()
+              controller.close()
+              options.onComplete?.(message, start, finish)
               return
             }
+
+            const { choices } = JSON.parse(data) as OpenAIChatResponseData
+            const text = choices[0].delta.content
             message += text
             controller.enqueue(encoder.encode(text))
           } catch (e) {
