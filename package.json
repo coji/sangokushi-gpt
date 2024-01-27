@@ -11,7 +11,7 @@
     "dev:remix": "remix dev",
     "dev:api": "cd api && rye run start",
     "finetune": "cd api && rye run finetune",
-    "start": "remix-serve build",
+    "start": "remix-serve build/index.js",
     "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
     "typecheck": "tsc",
     "validate": "run-p lint typecheck",
