@@ -1,4 +1,4 @@
-import { type LinksFunction, type MetaFunction } from '@remix-run/node'
+import { type MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -7,7 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import globalStyles from './styles/globals.css'
+import './styles/globals.css'
 
 export const meta: MetaFunction = () => [
   { title: '三国志 GPT' },
@@ -31,10 +31,6 @@ export const meta: MetaFunction = () => [
   { property: 'og:image:height', content: '630' },
   { property: 'og:twitter:card', content: 'summary_large_image' },
   { property: 'og:twitter:site', content: '@techtalkjp' },
-]
-
-export const links: LinksFunction = () => [
-  { rel: 'stylesheet', href: globalStyles },
 ]
 
 export default function App() {

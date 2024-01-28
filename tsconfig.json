@@ -1,5 +1,5 @@
 {
-  "include": ["prettier.config.js", "*", "**/*"],
+  "include": ["env.d.ts", "**/*.ts", "**/*.tsx"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2019"],
     "isolatedModules": true,
