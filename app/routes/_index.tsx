@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { Form, useLoaderData } from '@remix-run/react'
 import React from 'react'
 import nl2br from 'react-nl2br'
@@ -24,7 +24,10 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
     })
   }
 
-  const [result, doc] = await Promise.all([search(input), fetchMostSimilarDoc(input)])
+  const [result, doc] = await Promise.all([
+    search(input),
+    fetchMostSimilarDoc(input),
+  ])
 
   return json({ input, result, doc })
 }
@@ -35,7 +38,9 @@ export default function Index() {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     const formData = new FormData(e.currentTarget)
-    const { input } = await zx.parseForm(formData, { input: z.string().optional() })
+    const { input } = await zx.parseForm(formData, {
+      input: z.string().optional(),
+    })
     if (input) {
       void generator.generate(input) // ストリーミングで生成
     }
@@ -53,7 +58,12 @@ export default function Index() {
               placeholder="劉備と関羽が出会ったシーンは？"
               defaultValue={input}
             />
-            <Button variant="default" type="submit" isLoading={generator.isLoading} disabled={generator.isLoading}>
+            <Button
+              variant="default"
+              type="submit"
+              isLoading={generator.isLoading}
+              disabled={generator.isLoading}
+            >
               Query
             </Button>
           </HStack>
@@ -76,7 +86,11 @@ export default function Index() {
         </div>
 
         <div className="leading-8">
-          {generator.error ? <div className="text-destructive">{generator.error}</div> : nl2br(generator.data)}
+          {generator.error ? (
+            <div className="text-destructive">{generator.error}</div>
+          ) : (
+            nl2br(generator.data)
+          )}
         </div>
       </Stack>
     </AppLayout>

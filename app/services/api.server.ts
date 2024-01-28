@@ -1,11 +1,17 @@
 import createClient from 'openapi-fetch'
-import type { paths } from './api-client'
+import type { components, paths } from './api-client'
 
-const { GET, POST } = createClient<paths>({ baseUrl: process.env.API_BASE_URL ?? 'http://localhost:8000' })
+export type Doc = components['schemas']['Doc']
+
+const { GET, POST } = createClient<paths>({
+  baseUrl: process.env.API_BASE_URL ?? 'http://localhost:8000',
+})
 
 export const search = async (query: string, top_k = 10) => {
-  const { data } = await GET('/search', { params: { query: { q: query, top_k } } })
-  return data?.result
+  const { data } = await GET('/search', {
+    params: { query: { q: query, top_k } },
+  })
+  return data?.result ?? []
 }
 
 export const fetchEmbedding = async (text: string) => {
@@ -19,6 +25,8 @@ export const fetchDoc = async (id: number) => {
 }
 
 export const fetchMostSimilarDoc = async (query: string) => {
-  const { data } = await GET('/search', { params: { query: { q: query, top_k: 1 } } })
-  return data?.result[0]
+  const { data } = await GET('/search', {
+    params: { query: { q: query, top_k: 1 } },
+  })
+  return data?.result[0].document
 }

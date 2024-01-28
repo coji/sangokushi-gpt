@@ -1,4 +1,4 @@
-import { json, type LoaderFunctionArgs } from '@remix-run/node'
+import { type LoaderFunctionArgs, json } from '@remix-run/node'
 import { Form, useLoaderData, useNavigation } from '@remix-run/react'
 import nl2br from 'react-nl2br'
 import { z } from 'zod'
@@ -29,7 +29,6 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
   }
 
   const result = await search(q)
-  console.log(result)
   return json({ query: q, result })
 }
 
@@ -42,8 +41,16 @@ export default function SearchPage() {
       <Stack className="h-full">
         <Form>
           <HStack>
-            <Input autoFocus name="q" placeholder="酒を飲む張飛" defaultValue={query} />
-            <Button isLoading={navigation.state !== 'idle'} disabled={navigation.state !== 'idle'}>
+            <Input
+              autoFocus
+              name="q"
+              placeholder="酒を飲む張飛"
+              defaultValue={query}
+            />
+            <Button
+              isLoading={navigation.state !== 'idle'}
+              disabled={navigation.state !== 'idle'}
+            >
               Search
             </Button>
           </HStack>
@@ -61,8 +68,8 @@ export default function SearchPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {result.map((r, i) => (
-                  <TableRow key={`r.document.id-${i}`}>
+                {result?.map((r, i) => (
+                  <TableRow key={r.document.id}>
                     <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
                     <TableCell>{r.document.volume_title}</TableCell>
                     <TableCell>{r.document.chapter_title}</TableCell>

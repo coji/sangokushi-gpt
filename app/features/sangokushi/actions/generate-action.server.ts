@@ -10,6 +10,9 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     invariant(input, 'Missing input')
 
     const doc = await fetchMostSimilarDoc(input)
+    if (!doc) {
+      throw new Error('No similar doc found')
+    }
 
     const systemPrompt = `
 You are a professional novelist.

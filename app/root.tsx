@@ -1,6 +1,12 @@
-import { json, type LinksFunction, type LoaderFunctionArgs, type MetaFunction } from '@remix-run/node'
-import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
-import { keepAwake } from './services/shrink-to-zero.server'
+import { type LinksFunction, type MetaFunction } from '@remix-run/node'
+import {
+  Links,
+  LiveReload,
+  Meta,
+  Outlet,
+  Scripts,
+  ScrollRestoration,
+} from '@remix-run/react'
 import globalStyles from './styles/globals.css'
 
 export const meta: MetaFunction = () => [
@@ -27,12 +33,9 @@ export const meta: MetaFunction = () => [
   { property: 'og:twitter:site', content: '@techtalkjp' },
 ]
 
-export const links: LinksFunction = () => [{ rel: 'stylesheet', href: globalStyles }]
-
-export const loader = ({ request }: LoaderFunctionArgs) => {
-  keepAwake()
-  return json({})
-}
+export const links: LinksFunction = () => [
+  { rel: 'stylesheet', href: globalStyles },
+]
 
 export default function App() {
   return (

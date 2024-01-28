@@ -1,18 +1,29 @@
 import React from 'react'
 import nl2br from 'react-nl2br'
-import { Button, HStack, Popover, PopoverContent, PopoverTrigger } from '~/components/ui'
-import type { Doc } from '~/services/api-client'
+import {
+  Button,
+  HStack,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui'
+import type { Doc } from '~/services/api.server'
 
 interface SectionReferenceProps {
   section: Partial<Doc>
   children: React.ReactNode
 }
-export const SectionReference = ({ section, children }: SectionReferenceProps) => {
+export const SectionReference = ({
+  section,
+  children,
+}: SectionReferenceProps) => {
   return (
     <React.Fragment key={section.id}>
       {children}
 
-      <p className="text-slate-700">吉川英治 「三国志」 {section.volume_title}</p>
+      <p className="text-slate-700">
+        吉川英治 「三国志」 {section.volume_title}
+      </p>
 
       <Popover>
         <PopoverTrigger asChild>
@@ -26,7 +37,9 @@ export const SectionReference = ({ section, children }: SectionReferenceProps) =
             <p>{section.chapter_title}</p>
             <p>{section.section_number}</p>
           </HStack>
-          <div className="h-[20rem] overflow-auto text-sm">{nl2br(section.content)}</div>
+          <div className="h-[20rem] overflow-auto text-sm">
+            {nl2br(section.content)}
+          </div>
         </PopoverContent>
       </Popover>
     </React.Fragment>

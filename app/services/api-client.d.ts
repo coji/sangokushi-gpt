@@ -3,136 +3,134 @@
  * Do not make direct changes to the file.
  */
 
-
 export interface paths {
-  "/embedding": {
+  '/embedding': {
     /**
      * Embedding
      * @description 文章を受け取り、ベクトル化した結果を返すAPI
      */
-    post: operations["embedding_embedding_post"];
-  };
-  "/doc": {
+    post: operations['embedding_embedding_post']
+  }
+  '/doc': {
     /**
      * Documents
      * @description ドキュメントの一覧
      */
-    get: operations["documents_doc_get"];
-  };
-  "/doc/{id}": {
+    get: operations['documents_doc_get']
+  }
+  '/doc/{id}': {
     /**
      * Document
      * @description ドキュメントを1つ返す
      */
-    get: operations["document_doc__id__get"];
-  };
-  "/cluster": {
+    get: operations['document_doc__id__get']
+  }
+  '/cluster': {
     /**
      * Cluster Index
      * @description クラスターの一覧
      */
-    get: operations["cluster_index_cluster_get"];
-  };
-  "/cluster/{cluster}": {
+    get: operations['cluster_index_cluster_get']
+  }
+  '/cluster/{cluster}': {
     /**
      * Get Cluster
      * @description クラスタに属するドキュメントを返す
      */
-    get: operations["get_cluster_cluster__cluster__get"];
-  };
-  "/search": {
+    get: operations['get_cluster_cluster__cluster__get']
+  }
+  '/search': {
     /**
      * Search
      * @description 文章を受け取り、類似度の高い文章を返す
      */
-    get: operations["search_search_get"];
-  };
-  "/search_influence": {
+    get: operations['search_search_get']
+  }
+  '/search_influence': {
     /**
      * Search Influence
      * @description 魏呉蜀のどれに近いか判定する
      */
-    get: operations["search_influence_search_influence_get"];
-  };
+    get: operations['search_influence_search_influence_get']
+  }
 }
 
-export type webhooks = Record<string, never>;
+export type webhooks = Record<string, never>
 
 export interface components {
   schemas: {
     /** Doc */
     Doc: {
       /** Id */
-      id: number;
+      id: number
       /** Volume Title */
-      volume_title: string;
+      volume_title: string
       /** Chapter Title */
-      chapter_title: string;
+      chapter_title: string
       /** Section Number */
-      section_number: string;
+      section_number: string
       /** Content */
-      content: string;
-    };
+      content: string
+    }
     /** DocListItem */
     DocListItem: {
       /** Id */
-      id: number;
+      id: number
       /** Volume Title */
-      volume_title: string;
+      volume_title: string
       /** Chapter Title */
-      chapter_title: string;
+      chapter_title: string
       /** Section Number */
-      section_number: string;
-    };
+      section_number: string
+    }
     /** EmbeddingParams */
     EmbeddingParams: {
       /** Sentence */
-      sentence: string;
-    };
+      sentence: string
+    }
     /** EmbeddingResponse */
     EmbeddingResponse: {
       /** Embedding */
-      embedding: number[];
-    };
+      embedding: number[]
+    }
     /** HTTPValidationError */
     HTTPValidationError: {
       /** Detail */
-      detail?: components["schemas"]["ValidationError"][];
-    };
+      detail?: components['schemas']['ValidationError'][]
+    }
     /** ScoredDoc */
     ScoredDoc: {
-      document: components["schemas"]["Doc"];
+      document: components['schemas']['Doc']
       /** Score */
-      score: number;
-    };
+      score: number
+    }
     /** SearchResponse */
     SearchResponse: {
       /** Result */
-      result: components["schemas"]["ScoredDoc"][];
-    };
+      result: components['schemas']['ScoredDoc'][]
+    }
     /** ValidationError */
     ValidationError: {
       /** Location */
-      loc: (string | number)[];
+      loc: (string | number)[]
       /** Message */
-      msg: string;
+      msg: string
       /** Error Type */
-      type: string;
-    };
-  };
-  responses: never;
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+      type: string
+    }
+  }
+  responses: never
+  parameters: never
+  requestBodies: never
+  headers: never
+  pathItems: never
 }
 
-export type $defs = Record<string, never>;
+export type $defs = Record<string, never>
 
-export type external = Record<string, never>;
+export type external = Record<string, never>
 
 export interface operations {
-
   /**
    * Embedding
    * @description 文章を受け取り、ベクトル化した結果を返すAPI
@@ -140,24 +138,24 @@ export interface operations {
   embedding_embedding_post: {
     requestBody: {
       content: {
-        "application/json": components["schemas"]["EmbeddingParams"];
-      };
-    };
+        'application/json': components['schemas']['EmbeddingParams']
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["EmbeddingResponse"];
-        };
-      };
+          'application/json': components['schemas']['EmbeddingResponse']
+        }
+      }
       /** @description Validation Error */
       422: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   /**
    * Documents
    * @description ドキュメントの一覧
@@ -167,11 +165,11 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["DocListItem"][];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['DocListItem'][]
+        }
+      }
+    }
+  }
   /**
    * Document
    * @description ドキュメントを1つ返す
@@ -179,24 +177,24 @@ export interface operations {
   document_doc__id__get: {
     parameters: {
       path: {
-        id: number;
-      };
-    };
+        id: number
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["Doc"];
-        };
-      };
+          'application/json': components['schemas']['Doc']
+        }
+      }
       /** @description Validation Error */
       422: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   /**
    * Cluster Index
    * @description クラスターの一覧
@@ -206,11 +204,11 @@ export interface operations {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": unknown;
-        };
-      };
-    };
-  };
+          'application/json': unknown
+        }
+      }
+    }
+  }
   /**
    * Get Cluster
    * @description クラスタに属するドキュメントを返す
@@ -218,24 +216,24 @@ export interface operations {
   get_cluster_cluster__cluster__get: {
     parameters: {
       path: {
-        cluster: string;
-      };
-    };
+        cluster: string
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": unknown;
-        };
-      };
+          'application/json': unknown
+        }
+      }
       /** @description Validation Error */
       422: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   /**
    * Search
    * @description 文章を受け取り、類似度の高い文章を返す
@@ -243,25 +241,25 @@ export interface operations {
   search_search_get: {
     parameters: {
       query: {
-        q: string;
-        top_k?: number;
-      };
-    };
+        q: string
+        top_k?: number
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": components["schemas"]["SearchResponse"];
-        };
-      };
+          'application/json': components['schemas']['SearchResponse']
+        }
+      }
       /** @description Validation Error */
       422: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
   /**
    * Search Influence
    * @description 魏呉蜀のどれに近いか判定する
@@ -269,22 +267,22 @@ export interface operations {
   search_influence_search_influence_get: {
     parameters: {
       query: {
-        q: string;
-      };
-    };
+        q: string
+      }
+    }
     responses: {
       /** @description Successful Response */
       200: {
         content: {
-          "application/json": unknown;
-        };
-      };
+          'application/json': unknown
+        }
+      }
       /** @description Validation Error */
       422: {
         content: {
-          "application/json": components["schemas"]["HTTPValidationError"];
-        };
-      };
-    };
-  };
+          'application/json': components['schemas']['HTTPValidationError']
+        }
+      }
+    }
+  }
 }

@@ -42,11 +42,19 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
       <footer className="bg-background py-2 text-center">
         <div className="container">
           Copyright &copy; {new Date().getFullYear()}{' '}
-          <Link to="https://twitter.com/techtalkjp/" target="_blank" color="blue.500">
+          <Link
+            to="https://twitter.com/techtalkjp/"
+            target="_blank"
+            color="blue.500"
+          >
             coji
           </Link>
           <div>
-            <Link to="https://github.com/coji/sangokushi-gpt" target="_blank" color="blue.500">
+            <Link
+              to="https://github.com/coji/sangokushi-gpt"
+              target="_blank"
+              color="blue.500"
+            >
               GitHub
             </Link>
           </div>
