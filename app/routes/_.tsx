@@ -1,9 +1,8 @@
-import { Link, useLocation, useNavigate } from '@remix-run/react'
-import React from 'react'
+import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
 import { match } from 'ts-pattern'
 import { HStack, Heading, Tabs, TabsList, TabsTrigger } from '~/components/ui'
 
-export const AppLayout = ({ children }: { children: React.ReactNode }) => {
+export const AppLayout = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const tab = match(location.pathname)
@@ -37,7 +36,9 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
       </header>
 
-      <main className="relative px-2 py-4 md:container">{children}</main>
+      <main className="relative px-2 py-4 md:container">
+        <Outlet />
+      </main>
 
       <footer className="bg-background py-2 text-center">
         <div className="container">
@@ -63,3 +64,4 @@ export const AppLayout = ({ children }: { children: React.ReactNode }) => {
     </div>
   )
 }
+export default AppLayout

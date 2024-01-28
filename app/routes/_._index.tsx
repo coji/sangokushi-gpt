@@ -4,7 +4,6 @@ import React from 'react'
 import nl2br from 'react-nl2br'
 import { z } from 'zod'
 import { zx } from 'zodix'
-import { AppLayout } from '~/components/AppLayout'
 import { Button, HStack, Input, Stack } from '~/components/ui'
 import { SectionReference } from '~/features/sangokushi/components/SectionReference'
 import { useGenerator } from '~/features/sangokushi/hooks/useGenerator'
@@ -47,52 +46,50 @@ export default function Index() {
   }
 
   return (
-    <AppLayout>
-      <Stack>
-        <Form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
-          <HStack>
-            <Input
-              className="w-full flex-1"
-              name="input"
-              autoFocus
-              placeholder="劉備と関羽が出会ったシーンは？"
-              defaultValue={input}
-            />
-            <Button
-              variant="default"
-              type="submit"
-              isLoading={generator.isLoading}
-              disabled={generator.isLoading}
-            >
-              Query
-            </Button>
-          </HStack>
-        </Form>
+    <Stack>
+      <Form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
+        <HStack>
+          <Input
+            className="w-full flex-1"
+            name="input"
+            autoFocus
+            placeholder="劉備と関羽が出会ったシーンは？"
+            defaultValue={input}
+          />
+          <Button
+            variant="default"
+            type="submit"
+            isLoading={generator.isLoading}
+            disabled={generator.isLoading}
+          >
+            Query
+          </Button>
+        </HStack>
+      </Form>
 
-        <div className="flex justify-end">
-          <HStack>
-            {doc &&
-              result.slice(0, 1).map((ret) => {
-                return (
-                  <SectionReference key={doc.id} section={doc}>
-                    <div className="text-xs font-bold">
-                      {Math.round(ret.score * 1000) / 10}
-                      <small>%</small> Match
-                    </div>
-                  </SectionReference>
-                )
-              })}
-          </HStack>
-        </div>
+      <div className="flex justify-end">
+        <HStack>
+          {doc &&
+            result.slice(0, 1).map((ret) => {
+              return (
+                <SectionReference key={doc.id} section={doc}>
+                  <div className="text-xs font-bold">
+                    {Math.round(ret.score * 1000) / 10}
+                    <small>%</small> Match
+                  </div>
+                </SectionReference>
+              )
+            })}
+        </HStack>
+      </div>
 
-        <div className="leading-8">
-          {generator.error ? (
-            <div className="text-destructive">{generator.error}</div>
-          ) : (
-            nl2br(generator.data)
-          )}
-        </div>
-      </Stack>
-    </AppLayout>
+      <div className="leading-8">
+        {generator.error ? (
+          <div className="text-destructive">{generator.error}</div>
+        ) : (
+          nl2br(generator.data)
+        )}
+      </div>
+    </Stack>
   )
 }
