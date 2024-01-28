@@ -3,24 +3,21 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
 	"linter": {
 		"enabled": true,
 		"rules": {
 			"recommended": true
 		},
-		"ignore": [
-			"build",
-			"api-cache",
-			"data",
-			"public",
-			".cache",
-			"api",
-			".vscode"
-		]
+		"ignore": ["api"]
 	},
 	"formatter": {
 		"enabled": true,
-		"ignore": ["build", "./app/services/api-client.d.ts"]
+		"ignore": ["api"]
 	},
 	"javascript": {
 		"formatter": {

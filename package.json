@@ -13,6 +13,7 @@
 		"finetune": "cd api && rye run finetune",
 		"start": "remix-serve build/server/index.js",
 		"lint": "biome lint .",
+		"format": "biome format .",
 		"typecheck": "tsc",
 		"validate": "run-p lint typecheck",
 		"clean:files": "tsx scripts/cleanAndConvertFiles"
