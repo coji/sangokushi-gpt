@@ -1,29 +1,24 @@
 [project]
 name = "sangokushi_api"
-version = "3.10.11"
+version = "0.1.0"
 description = "Add your description here"
 authors = [
     { name = "coji", email = "coji@techtalk.jp" }
 ]
 dependencies = [
+    "torch>=2.1.2",
     "sentence-transformers>=2.2.2",
-    "fugashi[unidic-lite]>=1.2.1",
-    "fastapi>=0.101.1",
-    "pydantic>=2.2.1",
-    "uvicorn[standard]>=0.23.2",
-    "torch==2.0.1",
+    "fugashi[unidic-lite]>=1.3.0",
+    "fastapi[all]>=0.109.0",
+    "pydantic>=2.5.3",
+    "uvicorn[standard]>=0.27.0",
     "hyperdb-python>=0.1.4",
-    "scikit-learn>=1.3.0",
-    "umap-learn>=0.5.3",
-    "llvmlite>=0.40.1",
-    "numba>=0.57.1",
-    "setuptools>=68.1.2",
-    "prisma>=0.10.0",
-    "isort>=5.12.0",
-    "pandas>=2.0.3",
+    "scikit-learn>=1.4.0",
+    "umap-learn>=0.5.5",
+    "prisma>=0.12.0",
 ]
 readme = "README.md"
-requires-python = ">= 3.8"
+requires-python = ">= 3.11"
 
 [build-system]
 requires = ["hatchling"]
@@ -33,24 +28,22 @@ build-backend = "hatchling.build"
 managed = true
 dev-dependencies = [
     "black>=23.7.0",
-    "isort>=5.12.0",
+    "isort>=5.13.2",
     "flake8>=5.0.4",
     "pyproject-flake8>=5.0.4.post1",
     "mypy>=1.5.1",
 ]
 
-[[tool.rye.sources]]
-name = "torch"
-url = "https://download.pytorch.org/whl/cpu"
-type = "index"
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/api"]
 
 [tool.rye.scripts]
 start = { cmd = 'uvicorn server:app --reload --host 0.0.0.0 --port 8000', env = { ENV = 'development' } }
 "build:db" = { cmd = 'python -m src.sangokushi_api.commands.build_db'}
 finetune = { cmd = 'python -m src.sangokushi_api.commands.finetune'}
-
-[tool.hatch.metadata]
-allow-direct-references = true
 
 # 以下各フォーマッター・リンターの詳細設定
 [tool.black]

@@ -211,6 +211,44 @@
           }
         }
       }
+    },
+    "/search_influence": {
+      "get": {
+        "summary": "Search Influence",
+        "description": "\u9b4f\u5449\u8700\u306e\u3069\u308c\u306b\u8fd1\u3044\u304b\u5224\u5b9a\u3059\u308b",
+        "operationId": "search_influence_search_influence_get",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Q"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {

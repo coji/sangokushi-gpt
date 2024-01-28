@@ -1,4 +1,5 @@
 import asyncio
+import json
 import re
 
 import umap
@@ -69,17 +70,17 @@ async def build_db(db_filename: str):
     print("embedding...")
     db = create_db(data)
 
-    print("clustering...")
-    clustering(db)
+    # print("clustering...")
+    # clustering(db)
 
     db.save(db_filename)
     print("db saved to", db_filename)
 
-    for doc in db.documents:
-        vector = doc["vector"]
+    for index, _ in enumerate(db.documents):
         # vector を DB に保存
         await prisma.section.update(
-            where={"id": doc["id"]}, data={"vector": vector}
+            where={"id": db.documents[index]["id"]},
+            data={"vector": json.dumps(db.vectors[index].tolist())},
         )
 
     await prisma.disconnect()

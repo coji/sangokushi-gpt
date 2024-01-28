@@ -47,6 +47,13 @@ export interface paths {
      */
     get: operations["search_search_get"];
   };
+  "/search_influence": {
+    /**
+     * Search Influence
+     * @description 魏呉蜀のどれに近いか判定する
+     */
+    get: operations["search_influence_search_influence_get"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -245,6 +252,31 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["SearchResponse"];
+        };
+      };
+      /** @description Validation Error */
+      422: {
+        content: {
+          "application/json": components["schemas"]["HTTPValidationError"];
+        };
+      };
+    };
+  };
+  /**
+   * Search Influence
+   * @description 魏呉蜀のどれに近いか判定する
+   */
+  search_influence_search_influence_get: {
+    parameters: {
+      query: {
+        q: string;
+      };
+    };
+    responses: {
+      /** @description Successful Response */
+      200: {
+        content: {
+          "application/json": unknown;
         };
       };
       /** @description Validation Error */

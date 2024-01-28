@@ -18,6 +18,7 @@ data/sangokushi_cleaned
 data/sangokushi_structured
 data/sangokushi_embedded
 data/postgres
+data/sangokushi.db
 
 .env*
 .flaskenv*
