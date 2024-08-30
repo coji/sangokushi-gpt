@@ -1,18 +1,25 @@
-import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
+import type { LoaderFunctionArgs } from '@remix-run/node'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { match } from 'ts-pattern'
 import { HStack, Heading, Tabs, TabsList, TabsTrigger } from '~/components/ui'
 
-export const AppLayout = () => {
-  const location = useLocation()
-  const tab = match(location.pathname)
+export const loader = ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url)
+  const tab = match(url.pathname)
     .when(
       (v) => v.startsWith('/search'),
-      () => '/search',
+      () => 'search',
     )
-    .otherwise(() => '/')
+    .otherwise(() => 'story')
+
+  return { tab }
+}
+
+export const AppLayout = () => {
+  const { tab } = useLoaderData<typeof loader>()
 
   return (
-    <div className="grid min-h-screen grid-rows-[auto_1fr_auto] bg-slate-200">
+    <div className="grid min-h-dvh grid-rows-[auto_1fr_auto] bg-slate-200">
       <header className="flex items-center bg-background py-2">
         <div className="container">
           <HStack>
@@ -22,10 +29,10 @@ export const AppLayout = () => {
 
             <Tabs value={tab}>
               <TabsList>
-                <TabsTrigger value="/" asChild>
+                <TabsTrigger value="story" asChild>
                   <Link to="/">ストーリー生成</Link>
                 </TabsTrigger>
-                <TabsTrigger value="/search" asChild>
+                <TabsTrigger value="search" asChild>
                   <Link to="/search">検索</Link>
                 </TabsTrigger>
               </TabsList>
