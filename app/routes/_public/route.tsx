@@ -4,7 +4,6 @@ import { HStack, Heading, Tabs, TabsList, TabsTrigger } from '~/components/ui'
 
 export const AppLayout = () => {
   const location = useLocation()
-  const navigate = useNavigate()
   const tab = match(location.pathname)
     .when(
       (v) => v.startsWith('/search'),
