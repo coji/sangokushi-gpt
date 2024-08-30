@@ -37,9 +37,7 @@ Create a short story that meets the user's request.
     schema,
     system,
     prompt: input,
-    onFinish: (event) => {
-      console.log({ input, event: event })
-    },
+    onFinish: (event) => console.log({ input, event: event }),
   })
 
   return result.toTextStreamResponse()
