@@ -1,4 +1,4 @@
-import { type MetaFunction } from '@remix-run/node'
+import type { LinksFunction, MetaFunction } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -7,7 +7,14 @@ import {
   Scripts,
   ScrollRestoration,
 } from '@remix-run/react'
-import './styles/globals.css'
+import globalStyles from './styles/globals.css?url'
+
+export const links: LinksFunction = () => [
+  {
+    rel: 'stylesheet',
+    href: globalStyles,
+  },
+]
 
 export const meta: MetaFunction = () => [
   { title: '三国志 GPT' },
@@ -46,7 +53,6 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        <LiveReload />
       </body>
     </html>
   )

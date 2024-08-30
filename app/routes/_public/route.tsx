@@ -21,15 +21,14 @@ export const AppLayout = () => {
               <Link to="/">三国志 GPT</Link>
             </Heading>
 
-            <Tabs
-              value={tab}
-              onValueChange={(val) => {
-                navigate(val)
-              }}
-            >
+            <Tabs value={tab}>
               <TabsList>
-                <TabsTrigger value="/">ストーリー生成</TabsTrigger>
-                <TabsTrigger value="/search">検索</TabsTrigger>
+                <TabsTrigger value="/" asChild>
+                  <Link to="/">ストーリー生成</Link>
+                </TabsTrigger>
+                <TabsTrigger value="/search" asChild>
+                  <Link to="/search">検索</Link>
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </HStack>

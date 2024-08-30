@@ -16,19 +16,13 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui'
-import { search } from '~/services/api.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { q } = zx.parseQuery(request, { q: z.string().optional() })
   if (!q) {
-    return json<{ query: string; result: Awaited<ReturnType<typeof search>> }>({
-      query: '',
-      result: [],
-    })
+    return { query: q, result: [] }
   }
-
-  const result = await search(q)
-  return json({ query: q, result })
+  return { query: q, result: [] }
 }
 
 export default function SearchPage() {
@@ -66,14 +60,14 @@ export default function SearchPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {result?.map((r, i) => (
+              {/* {result?.map((r, i) => (
                 <TableRow key={r.document.id}>
                   <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
                   <TableCell>{r.document.volume_title}</TableCell>
                   <TableCell>{r.document.chapter_title}</TableCell>
                   <TableCell>{nl2br(r.document.content)}</TableCell>
                 </TableRow>
-              ))}
+              ))} */}
             </TableBody>
           </Table>
         </div>
