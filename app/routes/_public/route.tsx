@@ -3,6 +3,8 @@ import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { match } from 'ts-pattern'
 import { HStack, Heading, Tabs, TabsList, TabsTrigger } from '~/components/ui'
 
+export const shouldRevalidate = () => true
+
 export const loader = ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url)
   const tab = match(url.pathname)

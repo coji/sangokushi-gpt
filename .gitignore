@@ -1,17 +1,9 @@
 node_modules
 
-.cache
 .env
 .vercel
-.output
 
 /build/
-/public/build
-/api/index.js
-/api/index.js.map
-
-qdrant-storage
-api-cache
 
 data/sangokushi
 data/sangokushi_cleaned
@@ -21,16 +13,10 @@ data/postgres
 data/sangokushi.db
 
 .env*
-.flaskenv*
 !.env.project
 !.env.vault
 
 # Editor directories and files
-.idea
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-.env
+
+prisma/dev.db*

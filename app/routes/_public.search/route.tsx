@@ -1,6 +1,6 @@
-import { type LoaderFunctionArgs, json } from '@remix-run/node'
+import type { LoaderFunctionArgs } from '@remix-run/node'
 import { Form, useLoaderData, useNavigation } from '@remix-run/react'
-import nl2br from 'react-nl2br'
+import ReactMarkdown from 'react-markdown'
 import { z } from 'zod'
 import { zx } from 'zodix'
 import {
@@ -16,13 +16,16 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui'
+import { searchSections } from './queries.server'
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { q } = zx.parseQuery(request, { q: z.string().optional() })
   if (!q) {
     return { query: q, result: [] }
   }
-  return { query: q, result: [] }
+
+  const result = await searchSections(q)
+  return { query: q, result }
 }
 
 export default function SearchPage() {
@@ -60,14 +63,16 @@ export default function SearchPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {/* {result?.map((r, i) => (
-                <TableRow key={r.document.id}>
+              {result.map((r, i) => (
+                <TableRow key={r.id}>
                   <TableCell>{Math.round(r.score * 1000) / 10}</TableCell>
-                  <TableCell>{r.document.volume_title}</TableCell>
-                  <TableCell>{r.document.chapter_title}</TableCell>
-                  <TableCell>{nl2br(r.document.content)}</TableCell>
+                  <TableCell>{r.volumeTitle}</TableCell>
+                  <TableCell>{r.chapterTitle}</TableCell>
+                  <TableCell>
+                    <ReactMarkdown>{r.content}</ReactMarkdown>
+                  </TableCell>
                 </TableRow>
-              ))} */}
+              ))}
             </TableBody>
           </Table>
         </div>
